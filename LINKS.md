@@ -8,6 +8,11 @@
 ## 🎴 Блэкджек
 **https://orcagoldenwhale.github.io/video-timestamp-app/blackjack.html**
 
+### 🎰 Блэкджек - Режим Casino (рекомендуется!)
+**https://orcagoldenwhale.github.io/video-timestamp-app/blackjack.html?style=casino**
+
+*Бархатный стол с тремя игроками - открывается сразу в режиме Casino!*
+
 ## 🃏 Дурак
 **https://orcagoldenwhale.github.io/video-timestamp-app/durak.html**
 

@@ -1519,12 +1519,34 @@
       const styleBtns = document.querySelectorAll('.style-btn');
       const body = document.body;
       
+      // Функция для переключения стиля
+      function switchStyle(styleName) {
+        body.className = `style-${styleName}`;
+        styleBtns.forEach(b => {
+          if (b.dataset.style === styleName) {
+            b.classList.add('active');
+          } else {
+            b.classList.remove('active');
+          }
+        });
+      }
+      
+      // Проверка URL параметра для автоматического выбора стиля
+      const urlParams = new URLSearchParams(window.location.search);
+      const styleParam = urlParams.get('style');
+      if (styleParam && ['casino', 'classic', 'modern', 'luxury'].includes(styleParam)) {
+        switchStyle(styleParam);
+      }
+      
+      // Обработчики кликов на кнопки стилей
       styleBtns.forEach(btn => {
         btn.addEventListener('click', () => {
           const style = btn.dataset.style;
-          body.className = `style-${style}`;
-          styleBtns.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
+          switchStyle(style);
+          // Обновляем URL без перезагрузки страницы
+          const newUrl = new URL(window.location);
+          newUrl.searchParams.set('style', style);
+          window.history.replaceState({}, '', newUrl);
         });
       });
 
