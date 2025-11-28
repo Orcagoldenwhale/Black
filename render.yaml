@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: casino-games
+    env: static
+    buildCommand: npm install
+    staticPublishPath: .
+    headers:
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: X-XSS-Protection
+        value: 1; mode=block
+
