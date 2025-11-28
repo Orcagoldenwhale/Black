@@ -1,0 +1,47 @@
+╔═══════════════════════════════════════════════════════════════╗
+║           🔗 ВАША ССЫЛКА НА БЛЭКДЖЕК - РЕЖИМ CASINO           ║
+╚═══════════════════════════════════════════════════════════════╝
+
+🎴 ПРЯМАЯ ССЫЛКА ДЛЯ ПУБЛИКАЦИИ:
+
+https://orcagoldenwhale.github.io/video-timestamp-app/blackjack.html?style=casino
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 ЧТО НУЖНО СДЕЛАТЬ (3 ШАГА):
+
+1️⃣  Выгрузите код на GitHub:
+   
+   Выполните в терминале:
+   cd "/Users/simonshmelev/Desktop/мой проект"
+   git push -u origin main --force
+   
+   Если потребуется авторизация:
+   - Username: Orcagoldenwhale
+   - Password: Personal Access Token
+   
+   Создать токен: https://github.com/settings/tokens
+
+2️⃣  Настройте GitHub Pages (2 клика):
+   
+   Откройте в браузере:
+   https://github.com/Orcagoldenwhale/video-timestamp-app/settings/pages
+   
+   Выберите:
+   - Branch: main
+   - Folder: / (root)
+   
+   Нажмите "Save"
+
+3️⃣  Подождите 1-2 минуты и используйте ссылку! ✅
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💡 Или запустите автоматический скрипт:
+   
+   Откройте терминал и выполните:
+   cd "/Users/simonshmelev/Desktop/мой проект"
+   ./DO_IT_NOW.sh
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
