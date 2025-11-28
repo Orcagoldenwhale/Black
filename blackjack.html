@@ -1244,12 +1244,19 @@
         // Игроки
         playerHands.forEach((hand, posIndex) => {
           playerCardsEls[posIndex].innerHTML = '';
+          // Позиции 1 и 2 (ИГРОК 2 и ИГРОК 3) показываем рубашкой во время игры
+          const shouldHide = (posIndex === 1 || posIndex === 2) && gameInProgress;
           hand.forEach(card => {
-            const cardEl = createCardElement(card, false, false);
+            const cardEl = createCardElement(card, shouldHide, false);
             playerCardsEls[posIndex].appendChild(cardEl);
           });
           const score = calculateScore(hand);
-          playerScoreEls[posIndex].textContent = score > 0 ? `Очки: ${score}` : 'Очки: 0';
+          // Для AI игроков не показываем очки во время игры
+          if (shouldHide) {
+            playerScoreEls[posIndex].textContent = 'Очки: ?';
+          } else {
+            playerScoreEls[posIndex].textContent = score > 0 ? `Очки: ${score}` : 'Очки: 0';
+          }
         });
       }
 
@@ -1272,10 +1279,17 @@
             });
           } else {
             playerHands[position].push(card);
-            const cardEl = createCardElement(card, false, true);
+            // Для позиций 1 и 2 (AI игроки) показываем карты рубашкой во время игры
+            const shouldHide = (position === 1 || position === 2) && gameInProgress;
+            const cardEl = createCardElement(card, shouldHide, true);
             playerCardsEls[position].appendChild(cardEl);
             const score = calculateScore(playerHands[position]);
-            playerScoreEls[position].textContent = `Очки: ${score}`;
+            // Для AI игроков не показываем очки во время игры
+            if (shouldHide) {
+              playerScoreEls[position].textContent = 'Очки: ?';
+            } else {
+              playerScoreEls[position].textContent = `Очки: ${score}`;
+            }
           }
           
           updateDeckCount();
@@ -1373,14 +1387,61 @@
       }
 
       function moveToNextPosition() {
-        if (currentPosition < 2) {
-          currentPosition++;
-          setActivePosition(currentPosition);
-          updateButtons();
+        // Игрок 1 (позиция 0) закончил, теперь играют AI игроки
+        if (currentPosition === 0) {
+          // Игрок 1 закончил, запускаем AI для игроков 2 и 3
+          playAIPlayers();
         } else {
           // Все позиции сыграли, ход дилера
           dealerTurn();
         }
+      }
+
+      // Функция для автоматической игры AI игроков (позиции 1 и 2)
+      function playAIPlayers() {
+        let aiPosition = 1; // Начинаем с ИГРОК 2 (позиция 1)
+        
+        function playNextAI() {
+          if (aiPosition > 2) {
+            // Все AI игроки сыграли, ход дилера
+            dealerTurn();
+            return;
+          }
+          
+          setActivePosition(aiPosition);
+          
+          // Простой алгоритм: если сумма < 16, берем карту, иначе не берем
+          const hand = playerHands[aiPosition];
+          const score = calculateScore(hand);
+          
+          if (score < 16 && score <= 21) {
+            // Берем карту
+            dealCardToPosition(aiPosition, false, false, 0);
+            setTimeout(() => {
+              const newScore = calculateScore(playerHands[aiPosition]);
+              if (newScore > 21) {
+                // Перебор, переходим к следующему AI
+                playerScoreEls[aiPosition].textContent = `Очки: ${newScore} (Перебор!)`;
+                aiPosition++;
+                setTimeout(playNextAI, 1000);
+              } else if (newScore < 16) {
+                // Продолжаем брать карты
+                playNextAI();
+              } else {
+                // >= 16, не берем, переходим к следующему
+                aiPosition++;
+                setTimeout(playNextAI, 1000);
+              }
+            }, 800);
+          } else {
+            // >= 16 или перебор, не берем, переходим к следующему
+            aiPosition++;
+            setTimeout(playNextAI, 1000);
+          }
+        }
+        
+        // Начинаем игру AI игроков
+        setTimeout(playNextAI, 500);
       }
 
       function setActivePosition(position) {
@@ -1418,6 +1479,10 @@
         const dealerScore = calculateScore(dealerHand);
         dealerScoreEl.textContent = `Очки: ${dealerScore}`;
         
+        // Показываем карты AI игроков (раскрываем рубашки)
+        gameInProgress = false;
+        renderCards();
+        
         let totalWin = 0;
         let allBust = true;
         
@@ -1442,6 +1507,8 @@
             allBust = false;
           }
           
+          // Показываем результат для всех игроков
+          playerScoreEls[idx].textContent = `Очки: ${playerScore}`;
           if (win > 0) {
             playerScoreEls[idx].textContent += ` (+${win}€)`;
           }
@@ -1479,14 +1546,23 @@
 
       function updateButtons() {
         if (gameInProgress) {
-          hitBtn.disabled = false;
-          standBtn.disabled = false;
-          dealBtn.disabled = true;
-          const hand = playerHands[currentPosition];
-          if (hand && hand.length === 2 && balance >= currentBet * 2) {
-            doubleBtn.style.display = 'flex';
-            doubleBtn.disabled = false;
+          // Кнопки активны только для игрока 1 (позиция 0)
+          if (currentPosition === 0) {
+            hitBtn.disabled = false;
+            standBtn.disabled = false;
+            dealBtn.disabled = true;
+            const hand = playerHands[currentPosition];
+            if (hand && hand.length === 2 && balance >= currentBet * 2) {
+              doubleBtn.style.display = 'flex';
+              doubleBtn.disabled = false;
+            } else {
+              doubleBtn.style.display = 'none';
+            }
           } else {
+            // Для AI игроков кнопки неактивны
+            hitBtn.disabled = true;
+            standBtn.disabled = true;
+            dealBtn.disabled = true;
             doubleBtn.style.display = 'none';
           }
         } else {
