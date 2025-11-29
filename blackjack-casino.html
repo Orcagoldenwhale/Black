@@ -751,6 +751,34 @@
       text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
     }
 
+    /* Звездочка-валюта */
+    .star-currency {
+      display: inline-block;
+      color: #ffd700;
+      font-size: inherit;
+      line-height: inherit;
+      font-weight: 700;
+      margin-left: 2px;
+      background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #ffa500 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.8));
+      animation: starGlow 2s ease-in-out infinite;
+      vertical-align: baseline;
+    }
+
+    @keyframes starGlow {
+      0%, 100% {
+        filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.8));
+        opacity: 1;
+      }
+      50% {
+        filter: drop-shadow(0 0 6px rgba(255, 215, 0, 1));
+        opacity: 1;
+      }
+    }
+
     /* Выигрыш - яркий неон */
     .info-item:last-child {
       background: linear-gradient(135deg, rgba(0, 255, 0, 0.9) 0%, rgba(0, 200, 0, 0.9) 100%);
@@ -1234,9 +1262,9 @@
   <div class="casino-table" id="casinoTable">
     <!-- Информация -->
     <div class="info-bar">
-      <div class="info-item">Баланс: <span id="balance">1000</span> *</div>
-      <div class="info-item">Ставка: <span id="currentBet">100</span> *</div>
-      <div class="info-item">Выигрыш: <span id="winAmount">0</span> *</div>
+      <div class="info-item">Баланс: <span id="balance">1000</span> <span class="star-currency">★</span></div>
+      <div class="info-item">Ставка: <span id="currentBet">100</span> <span class="star-currency">★</span></div>
+      <div class="info-item">Выигрыш: <span id="winAmount">0</span> <span class="star-currency">★</span></div>
     </div>
 
     <!-- Центральный баннер -->
@@ -1737,7 +1765,7 @@
           // Показываем результат для всех игроков
           playerScoreEls[idx].textContent = `Очки: ${playerScore}`;
           if (win > 0) {
-            playerScoreEls[idx].textContent += ` (+${win}*)`;
+            playerScoreEls[idx].innerHTML += ` (+${win}<span class="star-currency">★</span>)`;
           }
         });
         
@@ -1746,7 +1774,7 @@
         winAmountEl.textContent = totalWin;
         
         if (totalWin > 0) {
-          showMessage(`Выигрыш: ${totalWin}*!`, 'win');
+          showMessage(`Выигрыш: ${totalWin}★!`, 'win');
           if (typeof confetti !== 'undefined') {
             confetti({
               particleCount: 100,
