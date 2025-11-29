@@ -1234,9 +1234,9 @@
   <div class="casino-table" id="casinoTable">
     <!-- Информация -->
     <div class="info-bar">
-      <div class="info-item">Баланс: <span id="balance">1000</span> €</div>
-      <div class="info-item">Ставка: <span id="currentBet">100</span> €</div>
-      <div class="info-item">Выигрыш: <span id="winAmount">0</span> €</div>
+      <div class="info-item">Баланс: <span id="balance">1000</span> *</div>
+      <div class="info-item">Ставка: <span id="currentBet">100</span> *</div>
+      <div class="info-item">Выигрыш: <span id="winAmount">0</span> *</div>
     </div>
 
     <!-- Центральный баннер -->
@@ -1280,7 +1280,7 @@
       <!-- Player 2 - слева -->
       <div class="player-position-wrapper">
         <div class="player-position" data-position="1">
-          <div class="player-label">ИГРОК 2</div>
+          <div class="player-label">Anonymous</div>
           <div class="player-cards" id="playerCards1"></div>
           <div class="player-score" id="playerScore1">Очки: 0</div>
         </div>
@@ -1296,7 +1296,7 @@
       <!-- Player 3 - справа -->
       <div class="player-position-wrapper">
         <div class="player-position" data-position="2">
-          <div class="player-label">ИГРОК 3</div>
+          <div class="player-label">Anonymous</div>
           <div class="player-cards" id="playerCards2"></div>
           <div class="player-score" id="playerScore2">Очки: 0</div>
         </div>
@@ -1737,7 +1737,7 @@
           // Показываем результат для всех игроков
           playerScoreEls[idx].textContent = `Очки: ${playerScore}`;
           if (win > 0) {
-            playerScoreEls[idx].textContent += ` (+${win}€)`;
+            playerScoreEls[idx].textContent += ` (+${win}*)`;
           }
         });
         
@@ -1746,7 +1746,7 @@
         winAmountEl.textContent = totalWin;
         
         if (totalWin > 0) {
-          showMessage(`Выигрыш: ${totalWin}€!`, 'win');
+          showMessage(`Выигрыш: ${totalWin}*!`, 'win');
           if (typeof confetti !== 'undefined') {
             confetti({
               particleCount: 100,
