@@ -186,11 +186,11 @@
       max-width: 240px;
     }
 
-    /* Player 1 (YOU) - центр, больше */
+    /* Player 1 (YOU) - центр, немного меньше */
     .player-position-wrapper:nth-child(2) {
       order: 2;
-      flex: 1.2;
-      max-width: 320px;
+      flex: 1.1;
+      max-width: 300px;
     }
 
     /* Player 3 - справа, меньше */
@@ -262,8 +262,8 @@
     }
 
     .player-position-wrapper:nth-child(2) .player-position {
-      padding: 25px;
-      border-width: 4px;
+      padding: 20px;
+      border-width: 3px;
     }
 
     .player-cards {
@@ -303,15 +303,15 @@
 
     /* Красивые карты */
     .card {
-      width: 75px;
-      height: 105px;
+      width: 85px;
+      height: 120px;
       background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
       border-radius: 8px;
       border: 1px solid rgba(0, 0, 0, 0.2);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 8px;
+      padding: 10px;
       box-shadow: 
         0 4px 8px rgba(0, 0, 0, 0.3),
         inset 0 1px 1px rgba(255, 255, 255, 0.9),
@@ -384,26 +384,32 @@
     }
 
     .card-rank {
-      font-size: 18px;
-      line-height: 1;
+      font-size: 20px;
+      line-height: 1.1;
       font-weight: 900;
       font-family: 'Cinzel', serif;
+      flex-shrink: 0;
     }
 
     .card-suit {
-      font-size: 28px;
+      font-size: 32px;
       text-align: center;
       line-height: 1;
-      margin: 2px 0;
+      margin: 4px 0;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .card-rank-bottom {
-      font-size: 18px;
-      line-height: 1;
+      font-size: 20px;
+      line-height: 1.1;
       transform: rotate(180deg);
       text-align: right;
       font-weight: 900;
       font-family: 'Cinzel', serif;
+      flex-shrink: 0;
     }
 
     /* Обратная сторона карты */
