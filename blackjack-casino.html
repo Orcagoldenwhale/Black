@@ -1836,8 +1836,7 @@
         });
         
         if (dealerWins > 0 && dealerScore <= 21) {
-          const dealerWinAmount = dealerWins * currentBet;
-          messageQueue.push({ text: `Дилер выиграл: ${dealerWinAmount}★!`, type: 'lose', delay: messageDelay });
+          messageQueue.push({ text: `Дилер выиграл!`, type: 'lose', delay: messageDelay });
           messageDelay += 2500;
         }
         
