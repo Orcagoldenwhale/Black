@@ -1,47 +1,17 @@
-# 🎰 Casino Games - Blackjack & Durak
+# 🎰 Casino Games
 
-Проект с двумя казино играми: Блэкджек и Дурак в стиле казино.
+Две казино игры: Блэкджек и Дурак в стиле казино.
 
 ## 🎮 Игры
 
-### ♠️ Blackjack Casino
-- Файл: `blackjack-casino.html`
-- Блэкджек с 3 игроками
-- Реалистичная анимация карт
-- Звуковые эффекты
-
-### 🃏 Durak Casino  
-- Файл: `durak-casino.html`
-- Дурак с 3 игроками
-- Казино стиль оформления
+- **Blackjack Casino** - `blackjack-casino.html`
+- **Durak Casino** - `durak-casino.html`
 
 ## 🌐 Онлайн
 
-Игры доступны на Netlify:
-- **Blackjack Casino**: https://zingy-croissant-2baeff.netlify.app/blackjack-casino.html
-- **Durak Casino**: https://zingy-croissant-2baeff.netlify.app/durak-casino.html
+- Blackjack: https://zingy-croissant-2baeff.netlify.app/blackjack-casino.html
+- Durak: https://zingy-croissant-2baeff.netlify.app/durak-casino.html
 
-## 📁 Структура
+## 🚀 Запуск
 
-- `blackjack-casino.html` - Блэкджек Казино (чистая версия без переключателей)
-- `durak-casino.html` - Дурак Казино (чистая версия без переключателей)
-
-## 🚀 Запуск локально
-
-Просто откройте HTML файлы в браузере:
-
-```bash
-open blackjack-casino.html
-open durak-casino.html
-```
-
-## 🎨 Технологии
-
-- HTML5, CSS3, JavaScript
-- GSAP для анимаций
-- Font Awesome для иконок
-- Canvas Confetti для эффектов
-
----
-
-**Примечание**: Это упрощенная версия только с казино играми без переключателей стилей.
+Откройте HTML файлы в браузере.

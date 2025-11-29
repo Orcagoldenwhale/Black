@@ -467,31 +467,28 @@
       height: 50px;
       border: none;
       border-radius: 50%;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: #667eea;
       color: white;
       font-size: 20px;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 
-        0 4px 15px rgba(0, 0, 0, 0.4),
-        inset 0 2px 4px rgba(255, 255, 255, 0.2);
       display: flex;
       align-items: center;
       justify-content: center;
       font-family: 'Montserrat', sans-serif;
       padding: 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     }
 
     .control-btn:hover:not(:disabled) {
-      transform: translateY(-3px) scale(1.1);
-      box-shadow: 
-        0 6px 20px rgba(102, 126, 234, 0.6),
-        inset 0 2px 4px rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
     }
 
     .control-btn:active:not(:disabled) {
-      transform: translateY(-1px) scale(1.05);
+      transform: translateY(0);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
     }
 
     .control-btn:disabled {
@@ -505,20 +502,20 @@
     }
 
     /* Специальные цвета для кнопок */
-    .control-btn[id="hitBtn"],
-          background: linear-gradient(135deg, #00ff00 0%, #00cc00 100%);
+    .control-btn[id="hitBtn"] {
+      background: #00ff00;
     }
 
-    .control-btn[id="standBtn"],
-          background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%);
+    .control-btn[id="standBtn"] {
+      background: #ff0000;
     }
 
-    .control-btn[id="dealBtn"],
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    .control-btn[id="dealBtn"] {
+      background: #667eea;
     }
 
-    .control-btn[id="doubleBtn"],
-          background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
+    .control-btn[id="doubleBtn"] {
+      background: #ffd700;
     }
 
     /* Информация */
