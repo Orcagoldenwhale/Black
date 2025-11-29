@@ -637,6 +637,181 @@
       border-color: #ff0000;
       box-shadow: 0 0 50px rgba(255, 0, 0, 0.5);
     }
+
+    /* Мобильная адаптация для горизонтальной ориентации */
+    @media screen and (max-width: 900px) and (orientation: landscape) {
+      body {
+        padding: 5px;
+      }
+
+      .game-switcher {
+        top: 5px;
+        padding: 5px 10px;
+        font-size: 10px;
+      }
+
+      .game-btn {
+        padding: 5px 10px;
+        font-size: 10px;
+      }
+
+      .casino-table {
+        width: 100%;
+        height: 100vh;
+        max-height: calc(100vh - 10px);
+        max-width: 100%;
+      }
+
+      .info-bar {
+        top: 5px;
+        left: 5px;
+        right: 5px;
+        font-size: 10px;
+      }
+
+      .info-item {
+        padding: 4px 8px;
+        font-size: 10px;
+      }
+
+      .deck-area {
+        top: 40px;
+      }
+
+      .trump-label {
+        font-size: 8px;
+        top: -20px;
+      }
+
+      .deck-container {
+        width: 50px;
+        height: 70px;
+      }
+
+      .deck {
+        width: 45px;
+        height: 63px;
+      }
+
+      .trump-card {
+        width: 45px;
+        height: 63px;
+        top: 8px;
+        left: 8px;
+      }
+
+      .deck-count {
+        font-size: 9px;
+        bottom: -18px;
+      }
+
+      .play-area {
+        top: 100px;
+        left: 10px;
+        width: 150px;
+        min-height: 200px;
+        max-height: 200px;
+      }
+
+      .play-area .card {
+        width: 40px;
+        height: 56px;
+        font-size: 12px;
+      }
+
+      .controls {
+        top: 200px;
+        left: 10px;
+        gap: 5px;
+      }
+
+      .control-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 12px;
+      }
+
+      .player-positions {
+        bottom: 5px;
+        gap: 8px;
+      }
+
+      .player-position-wrapper {
+        max-width: 180px;
+      }
+
+      .player-position {
+        padding: 8px;
+      }
+
+      .player-label {
+        font-size: 11px;
+        margin-bottom: 5px;
+      }
+
+      .player-cards {
+        min-height: 70px;
+        max-height: 70px;
+        padding: 0 10px;
+      }
+
+      .card {
+        width: 40px;
+        height: 56px;
+        font-size: 10px;
+        margin-left: -15px;
+      }
+
+      .card-rank {
+        font-size: 12px;
+      }
+
+      .card-suit {
+        font-size: 14px;
+      }
+
+      .player-card-count {
+        font-size: 10px;
+        margin-top: 5px;
+      }
+
+      .game-message {
+        padding: 15px 25px;
+        font-size: 18px;
+      }
+    }
+
+    /* Мобильная адаптация для вертикальной ориентации (портрет) */
+    @media screen and (max-width: 600px) and (orientation: portrait) {
+      body {
+        padding: 5px;
+      }
+
+      .casino-table {
+        width: 100%;
+        height: calc(100vh - 80px);
+        max-height: none;
+      }
+
+      .game-switcher {
+        top: 5px;
+        padding: 5px 10px;
+        font-size: 10px;
+      }
+
+      .deck-area {
+        top: 50px;
+      }
+
+      .player-positions {
+        bottom: 10px;
+      }
+
+      .card {
+        width: 45px;
+        height: 63px;
+      }
+    }
   </style>
 </head>
 <body>

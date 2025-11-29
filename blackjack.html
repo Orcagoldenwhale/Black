@@ -934,6 +934,208 @@
         0 4px 8px rgba(0, 0, 0, 0.5),
         inset 0 2px 4px rgba(255, 255, 255, 0.6);
     }
+
+    /* Мобильная адаптация для горизонтальной ориентации (только для режима Casino) */
+    @media screen and (max-width: 900px) and (orientation: landscape) {
+      body {
+        padding: 5px;
+      }
+
+      .game-switcher {
+        top: 5px;
+        padding: 5px 10px;
+        font-size: 10px;
+      }
+
+      .game-btn {
+        padding: 5px 10px;
+        font-size: 10px;
+      }
+
+      .style-switcher {
+        top: 5px;
+        right: 5px;
+        padding: 5px;
+        max-width: 200px;
+      }
+
+      .style-btn {
+        padding: 4px 8px;
+        font-size: 10px;
+      }
+
+      .casino-table {
+        width: 100%;
+        height: 100vh;
+        max-height: calc(100vh - 10px);
+        border-radius: 15px;
+        border-width: 4px;
+      }
+
+      .info-bar {
+        top: 5px;
+        left: 5px;
+        right: 5px;
+        font-size: 10px;
+        gap: 5px;
+      }
+
+      .info-item {
+        padding: 4px 8px;
+        font-size: 10px;
+      }
+
+      .table-info {
+        bottom: 5px;
+        padding: 4px 10px;
+        font-size: 8px;
+      }
+
+      .dealer-section {
+        top: 30px;
+      }
+
+      .dealer-label {
+        font-size: 14px;
+        margin-bottom: 5px;
+      }
+
+      .dealer-cards {
+        gap: 5px;
+      }
+
+      .dealer-score {
+        font-size: 10px;
+        margin-top: 5px;
+      }
+
+      .card {
+        width: 35px;
+        height: 49px;
+        font-size: 10px;
+      }
+
+      .card-rank {
+        font-size: 12px;
+      }
+
+      .card-suit {
+        font-size: 14px;
+      }
+
+      .players-section {
+        bottom: 50px;
+        gap: 10px;
+      }
+
+      .player-position {
+        padding: 8px;
+        min-width: 120px;
+      }
+
+      .player-label {
+        font-size: 10px;
+        margin-bottom: 5px;
+        padding: 2px 6px;
+      }
+
+      .player-cards {
+        gap: 5px;
+        margin: 5px 0;
+      }
+
+      .player-score {
+        font-size: 9px;
+        margin-top: 3px;
+      }
+
+      .bet-chip {
+        width: 35px;
+        height: 35px;
+        font-size: 12px;
+        margin-top: 5px;
+      }
+
+      .deck-container {
+        top: 50px;
+      }
+
+      .deck {
+        width: 45px;
+        height: 63px;
+      }
+
+      .deck-count {
+        font-size: 10px;
+        bottom: -18px;
+      }
+
+      .controls {
+        margin-top: 30px;
+        gap: 5px;
+      }
+
+      .control-btn {
+        width: 40px;
+        height: 40px;
+      }
+
+      .control-btn i {
+        font-size: 14px;
+      }
+
+      .game-message {
+        padding: 15px 25px;
+        font-size: 18px;
+      }
+    }
+
+    /* Мобильная адаптация для вертикальной ориентации (портрет) */
+    @media screen and (max-width: 600px) and (orientation: portrait) {
+      body {
+        padding: 5px;
+      }
+
+      .casino-table {
+        width: 100%;
+        height: calc(100vh - 80px);
+        max-height: none;
+      }
+
+      .game-switcher {
+        top: 5px;
+        padding: 5px 10px;
+        font-size: 10px;
+      }
+
+      .style-switcher {
+        top: 5px;
+        right: 5px;
+        padding: 5px;
+      }
+
+      .dealer-section {
+        top: 40px;
+      }
+
+      .dealer-label {
+        font-size: 16px;
+      }
+
+      .players-section {
+        bottom: 60px;
+        gap: 8px;
+      }
+
+      .player-position {
+        min-width: 100px;
+      }
+
+      .card {
+        width: 40px;
+        height: 56px;
+      }
+    }
   </style>
 </head>
 <body class="style-casino">
