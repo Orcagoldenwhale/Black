@@ -179,18 +179,18 @@
       align-items: center;
     }
 
-    /* Player 1 (YOU) - центр, больше */
-    .player-position-wrapper:first-child {
-      order: 2;
-      flex: 1.2;
-      max-width: 320px;
-    }
-
     /* Player 2 - слева, меньше */
-    .player-position-wrapper:nth-child(2) {
+    .player-position-wrapper:first-child {
       order: 1;
       flex: 0.9;
       max-width: 240px;
+    }
+
+    /* Player 1 (YOU) - центр, больше */
+    .player-position-wrapper:nth-child(2) {
+      order: 2;
+      flex: 1.2;
+      max-width: 320px;
     }
 
     /* Player 3 - справа, меньше */
@@ -244,26 +244,26 @@
       font-family: 'Cinzel', serif;
     }
 
-    /* Player 1 (YOU) - больший размер */
-    .player-position-wrapper:first-child .player-label {
-      font-size: 20px;
-    }
-
-    .player-position-wrapper:first-child .player-position {
-      padding: 25px;
-      border-width: 4px;
-    }
-
     /* Player 2 и 3 - меньший размер */
-    .player-position-wrapper:nth-child(2) .player-label,
+    .player-position-wrapper:first-child .player-label,
     .player-position-wrapper:nth-child(3) .player-label {
       font-size: 14px;
     }
 
-    .player-position-wrapper:nth-child(2) .player-position,
+    .player-position-wrapper:first-child .player-position,
     .player-position-wrapper:nth-child(3) .player-position {
       padding: 15px;
       border-width: 2px;
+    }
+
+    /* Player 1 (YOU) - больший размер */
+    .player-position-wrapper:nth-child(2) .player-label {
+      font-size: 20px;
+    }
+
+    .player-position-wrapper:nth-child(2) .player-position {
+      padding: 25px;
+      border-width: 4px;
     }
 
     .player-cards {
@@ -654,9 +654,9 @@
 
     .info-item {
       flex: 1;
-      background: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
       backdrop-filter: blur(10px);
-      border: 2px solid rgba(255, 255, 255, 0.3);
+      border: 3px solid rgba(102, 126, 234, 0.8);
       padding: 12px 20px;
       border-radius: 12px;
       color: white;
@@ -664,63 +664,97 @@
       font-size: 14px;
       font-family: 'Montserrat', sans-serif;
       box-shadow: 
-        0 4px 15px rgba(0, 0, 0, 0.3),
-        0 0 20px rgba(102, 126, 234, 0.3),
-        inset 0 2px 4px rgba(255, 255, 255, 0.1);
+        0 4px 15px rgba(0, 0, 0, 0.4),
+        0 0 30px rgba(102, 126, 234, 0.6),
+        0 0 50px rgba(102, 126, 234, 0.4),
+        inset 0 2px 4px rgba(255, 255, 255, 0.2);
       transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
+      animation: neonPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes neonPulse {
+      0%, 100% {
+        border-color: rgba(102, 126, 234, 0.8);
+        box-shadow: 
+          0 4px 15px rgba(0, 0, 0, 0.4),
+          0 0 30px rgba(102, 126, 234, 0.6),
+          0 0 50px rgba(102, 126, 234, 0.4),
+          inset 0 2px 4px rgba(255, 255, 255, 0.2);
+      }
+      50% {
+        border-color: rgba(118, 75, 162, 1);
+        box-shadow: 
+          0 4px 15px rgba(0, 0, 0, 0.4),
+          0 0 40px rgba(102, 126, 234, 0.8),
+          0 0 70px rgba(118, 75, 162, 0.6),
+          inset 0 2px 4px rgba(255, 255, 255, 0.3);
+      }
     }
 
     .info-item:hover {
       transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.6);
       box-shadow: 
-        0 6px 20px rgba(0, 0, 0, 0.4),
-        0 0 30px rgba(102, 126, 234, 0.5),
-        inset 0 2px 4px rgba(255, 255, 255, 0.2);
+        0 6px 20px rgba(0, 0, 0, 0.5),
+        0 0 50px rgba(102, 126, 234, 0.9),
+        0 0 80px rgba(118, 75, 162, 0.7),
+        inset 0 2px 4px rgba(255, 255, 255, 0.3);
     }
 
     .info-item span {
       color: white;
       font-weight: 700;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
     }
 
-    /* Выигрыш - ярче */
+    /* Выигрыш - яркий неон */
     .info-item:last-child {
-      background: linear-gradient(135deg, rgba(0, 255, 0, 0.8) 0%, rgba(0, 200, 0, 0.8) 100%);
+      background: linear-gradient(135deg, rgba(0, 255, 0, 0.9) 0%, rgba(0, 200, 0, 0.9) 100%);
+      border: 3px solid rgba(0, 255, 0, 0.9);
       box-shadow: 
-        0 4px 15px rgba(0, 0, 0, 0.3),
-        0 0 25px rgba(0, 255, 0, 0.5),
-        inset 0 2px 4px rgba(255, 255, 255, 0.2);
-      animation: winGlow 2s ease-in-out infinite;
+        0 4px 15px rgba(0, 0, 0, 0.4),
+        0 0 40px rgba(0, 255, 0, 0.8),
+        0 0 70px rgba(0, 255, 0, 0.6),
+        inset 0 2px 4px rgba(255, 255, 255, 0.3);
+      animation: winNeonPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes winNeonPulse {
+      0%, 100% {
+        border-color: rgba(0, 255, 0, 0.9);
+        box-shadow: 
+          0 4px 15px rgba(0, 0, 0, 0.4),
+          0 0 40px rgba(0, 255, 0, 0.8),
+          0 0 70px rgba(0, 255, 0, 0.6),
+          inset 0 2px 4px rgba(255, 255, 255, 0.3);
+      }
+      50% {
+        border-color: rgba(0, 255, 0, 1);
+        box-shadow: 
+          0 4px 15px rgba(0, 0, 0, 0.4),
+          0 0 60px rgba(0, 255, 0, 1),
+          0 0 100px rgba(0, 255, 0, 0.8),
+          inset 0 2px 4px rgba(255, 255, 255, 0.4);
+      }
     }
 
     .info-item:last-child:hover {
+      border-color: rgba(0, 255, 0, 1);
       box-shadow: 
-        0 6px 20px rgba(0, 0, 0, 0.4),
-        0 0 40px rgba(0, 255, 0, 0.7),
-        inset 0 2px 4px rgba(255, 255, 255, 0.3);
+        0 6px 20px rgba(0, 0, 0, 0.5),
+        0 0 70px rgba(0, 255, 0, 1),
+        0 0 120px rgba(0, 255, 0, 0.9),
+        inset 0 2px 4px rgba(255, 255, 255, 0.4);
     }
 
     .info-item:last-child span {
       color: #ffffff;
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+      text-shadow: 
+        0 0 10px rgba(255, 255, 255, 1),
+        0 0 20px rgba(0, 255, 0, 0.8);
       font-weight: 900;
-    }
-
-    @keyframes winGlow {
-      0%, 100% {
-        box-shadow: 
-          0 4px 15px rgba(0, 0, 0, 0.3),
-          0 0 25px rgba(0, 255, 0, 0.5),
-          inset 0 2px 4px rgba(255, 255, 255, 0.2);
-      }
-      50% {
-        box-shadow: 
-          0 4px 15px rgba(0, 0, 0, 0.3),
-          0 0 35px rgba(0, 255, 0, 0.8),
-          inset 0 2px 4px rgba(255, 255, 255, 0.3);
-      }
     }
 
     /* Сообщения */
