@@ -954,227 +954,34 @@
     @media screen and (max-width: 600px) and (orientation: portrait) {
       body {
         padding: 5px;
-        overflow-y: auto;
       }
 
       .casino-table {
         width: 100%;
-        height: auto;
-        min-height: 100vh;
+        height: calc(100vh - 80px);
         max-height: none;
-        border-radius: 15px;
-        border-width: 4px;
-        padding: 10px;
-        display: flex;
-        flex-direction: column;
       }
 
-      /* Info bar - компактный вверху */
-      .info-bar {
-        position: relative;
-        top: 0;
-        left: 0;
-        right: 0;
-        gap: 5px;
-        margin-bottom: 10px;
-        flex-wrap: wrap;
-      }
-
-      .info-item {
-        flex: 1;
-        min-width: calc(33.33% - 4px);
-        padding: 8px 10px;
-        font-size: 11px;
-        border-radius: 8px;
-      }
-
-      /* Дилер - компактно вверху */
       .dealer-section {
-        position: relative;
-        top: 0;
-        left: 0;
-        transform: none;
-        margin: 10px 0;
-        order: 1;
+        top: 40px;
       }
 
       .dealer-label {
-        font-size: 14px;
-        margin-bottom: 5px;
-      }
-
-      .dealer-cards {
-        gap: 4px;
-        min-height: 60px;
-      }
-
-      .dealer-score {
-        font-size: 12px;
-        margin-top: 5px;
-      }
-
-      /* Карты - меньше */
-      .card {
-        width: 30px;
-        height: 42px;
-        font-size: 8px;
-      }
-
-      .card-rank {
-        font-size: 10px;
-      }
-
-      .card-suit {
-        font-size: 12px;
-      }
-
-      /* Игроки - вертикальная компоновка */
-      .player-positions {
-        position: relative;
-        bottom: auto;
-        left: 0;
-        transform: none;
-        flex-direction: column;
-        gap: 10px;
-        width: 100%;
-        margin-top: 10px;
-        order: 2;
-      }
-
-      .player-position-wrapper {
-        width: 100%;
-        max-width: none;
-        flex: none;
-      }
-
-      /* YOU - центр, больше */
-      .player-position-wrapper:nth-child(2) {
-        order: 2;
-        flex: none;
-        max-width: none;
-      }
-
-      /* Player 2 - сверху */
-      .player-position-wrapper:first-child {
-        order: 1;
-        flex: none;
-        max-width: none;
-      }
-
-      /* Player 3 - снизу */
-      .player-position-wrapper:nth-child(3) {
-        order: 3;
-        flex: none;
-        max-width: none;
-      }
-
-      .player-position {
-        padding: 12px;
-        min-width: auto;
-        width: 100%;
-      }
-
-      .player-label {
-        font-size: 12px;
-        margin-bottom: 5px;
-      }
-
-      /* YOU - больший размер в вертикальной ориентации */
-      .player-position-wrapper:nth-child(2) .player-label {
         font-size: 16px;
       }
 
-      .player-position-wrapper:nth-child(2) .player-position {
-        padding: 15px;
-        border-width: 3px;
-      }
-
-      /* AI игроки - меньший размер */
-      .player-position-wrapper:first-child .player-label,
-      .player-position-wrapper:nth-child(3) .player-label {
-        font-size: 11px;
-      }
-
-      .player-position-wrapper:first-child .player-position,
-      .player-position-wrapper:nth-child(3) .player-position {
-        padding: 10px;
-        border-width: 2px;
-      }
-
-      .player-cards {
-        gap: 4px;
-        margin: 5px 0;
-        min-height: 50px;
-      }
-
-      .player-score {
-        font-size: 11px;
-        margin-top: 5px;
-      }
-
-      /* Колода и кнопки - снизу */
-      .deck-container {
-        position: relative;
-        top: auto;
-        right: auto;
-        left: 0;
-        transform: none;
-        width: 100%;
-        order: 3;
-        margin-top: 15px;
-      }
-
-      .deck-with-controls {
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        gap: 15px;
-      }
-
-      .deck {
-        width: 40px;
-        height: 56px;
-      }
-
-      .deck-count {
-        font-size: 10px;
-        position: relative;
-        bottom: auto;
-        left: auto;
-        transform: none;
-        margin-top: 5px;
-      }
-
-      .controls {
-        flex-direction: row;
-        margin-top: 0;
+      .player-positions {
+        bottom: 60px;
         gap: 8px;
       }
 
-      .control-btn {
-        width: 45px;
-        height: 45px;
+      .player-position {
+        min-width: 100px;
       }
 
-      .control-btn i {
-        font-size: 16px;
-      }
-
-      /* Правила - внизу */
-      .table-info {
-        position: relative;
-        bottom: auto;
-        left: 0;
-        transform: none;
-        margin-top: 15px;
-        padding: 6px 12px;
-        font-size: 9px;
-        order: 4;
-      }
-
-      .game-message {
-        padding: 20px 30px;
-        font-size: 20px;
+      .card {
+        width: 40px;
+        height: 56px;
       }
     }
   </style>
