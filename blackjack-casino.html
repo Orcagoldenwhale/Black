@@ -1028,7 +1028,7 @@
         font-size: 12px;
       }
 
-      /* Игроки - вертикальная компоновка */
+      /* Игроки - YOU сверху, Player 2 и 3 в ряд под ним */
       .player-positions {
         position: relative;
         bottom: auto;
@@ -1039,6 +1039,7 @@
         width: 100%;
         margin-top: 10px;
         order: 2;
+        align-items: center;
       }
 
       .player-position-wrapper {
@@ -1047,31 +1048,56 @@
         flex: none;
       }
 
-      /* YOU - центр, больше */
+      /* YOU - сверху, центр, больше */
       .player-position-wrapper:nth-child(2) {
-        order: 2;
-        flex: none;
-        max-width: none;
-      }
-
-      /* Player 2 - сверху */
-      .player-position-wrapper:first-child {
         order: 1;
         flex: none;
-        max-width: none;
+        max-width: 100%;
+        width: 100%;
       }
 
-      /* Player 3 - снизу */
+      /* Player 2 и 3 - в ряд под YOU */
+      .player-position-wrapper:first-child,
+      .player-position-wrapper:nth-child(3) {
+        flex: 1;
+        max-width: 48%;
+      }
+
+      /* Player 2 - слева под YOU */
+      .player-position-wrapper:first-child {
+        order: 2;
+      }
+
+      /* Player 3 - справа под YOU */
       .player-position-wrapper:nth-child(3) {
         order: 3;
-        flex: none;
-        max-width: none;
+      }
+
+      /* Обертка для Player 2 и 3 - в ряд */
+      .player-positions::after {
+        content: '';
+        order: 2;
+        display: flex;
+        width: 100%;
+        gap: 4%;
+        margin-top: -10px;
+      }
+
+      /* Контейнер для игроков 2 и 3 в ряд */
+      .player-positions {
+        flex-wrap: wrap;
       }
 
       .player-position {
         padding: 12px;
         min-width: auto;
         width: 100%;
+      }
+
+      /* Player 2 и 3 - меньшие размеры для компактности */
+      .player-position-wrapper:first-child .player-position,
+      .player-position-wrapper:nth-child(3) .player-position {
+        padding: 8px;
       }
 
       .player-label {
