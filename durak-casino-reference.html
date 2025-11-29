@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Дурак - Казино</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Montserrat:wght@400;600;700&family=Cinzel:wght@400;700;900&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, #1a0000 0%, #330000 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Бархатный стол */
+    .casino-table {
+      width: 95%;
+      max-width: 1400px;
+      height: 750px;
+      background: 
+        radial-gradient(circle at 50% 50%, rgba(139, 0, 0, 0.5) 0%, transparent 70%),
+        radial-gradient(circle at 20% 20%, rgba(128, 0, 32, 0.4) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(101, 15, 15, 0.4) 0%, transparent 50%),
+        linear-gradient(135deg, #B80028 0%, #A00020 50%, #B80028 100%);
+      background-image: 
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 20px,
+          rgba(0, 0, 0, 0.05) 20px,
+          rgba(0, 0, 0, 0.05) 21px
+        ),
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 20px,
+          rgba(0, 0, 0, 0.05) 20px,
+          rgba(0, 0, 0, 0.05) 21px
+        );
+      border-radius: 30px;
+      border: 5px solid #8B0000;
+      box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.8),
+        inset 0 0 100px rgba(0, 0, 0, 0.3),
+        0 0 50px rgba(184, 0, 40, 0.5);
+      position: relative;
+      margin: 0 auto;
+      padding: 20px;
+      overflow: hidden;
+    }
+
+    /* Информация */
+    .info-bar {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      right: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 20;
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .info-item {
+      background: rgba(0, 0, 0, 0.5);
+      padding: 6px 12px;
+      border-radius: 6px;
+    }
+
+    .info-item span {
+      color: white;
+      font-weight: 700;
+    }
+
+    /* Центральный баннер */
+    .table-info {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.4);
+      padding: 8px 20px;
+      border-radius: 8px;
+      border: 2px solid rgba(255, 255, 255, 0.25);
+      text-align: center;
+      font-weight: 600;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+      z-index: 10;
+      font-family: 'Cinzel', serif;
+      backdrop-filter: blur(5px);
+    }
+
+    /* Игровые позиции */
+    .player-positions {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 20px;
+      width: 95%;
+      justify-content: center;
+      align-items: flex-end;
+    }
+
+    .player-position-wrapper {
+      flex: 1;
+      max-width: 280px;
+      text-align: center;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .player-position {
+      width: 100%;
+      text-align: center;
+      position: relative;
+      padding: 15px;
+      border-radius: 15px;
+      border: 3px solid rgba(255, 215, 0, 0.4);
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(5px);
+      box-shadow: 
+        0 4px 15px rgba(0, 0, 0, 0.5),
+        inset 0 2px 5px rgba(255, 215, 0, 0.1);
+      transition: all 0.3s ease;
+      margin-bottom: 10px;
+    }
+
+    .player-position:hover {
+      border-color: rgba(255, 215, 0, 0.6);
+      box-shadow: 
+        0 6px 20px rgba(0, 0, 0, 0.6),
+        inset 0 2px 5px rgba(255, 215, 0, 0.2);
+    }
+
+    .player-position-wrapper .player-position.active {
+      border: 3px solid #ffd700;
+      background: rgba(0, 0, 0, 0.5);
+      box-shadow: 
+        0 0 30px rgba(255, 215, 0, 0.8),
+        0 4px 15px rgba(0, 0, 0, 0.6),
+        inset 0 2px 5px rgba(255, 215, 0, 0.3);
+      animation: positionGlow 1.5s ease-in-out infinite;
+    }
+
+    @keyframes positionGlow {
+      0%, 100% {
+        box-shadow: 
+          0 0 30px rgba(255, 215, 0, 0.8),
+          0 4px 15px rgba(0, 0, 0, 0.6),
+          inset 0 2px 5px rgba(255, 215, 0, 0.3);
+        border-color: #ffd700;
+      }
+      50% {
+        box-shadow: 
+          0 0 50px rgba(255, 215, 0, 1),
+          0 6px 20px rgba(0, 0, 0, 0.7),
+          inset 0 2px 5px rgba(255, 215, 0, 0.5);
+        border-color: #ffed4e;
+      }
+    }
+
+    .player-label {
+      color: #ffd700;
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-shadow: 
+        2px 2px 4px rgba(0, 0, 0, 0.8),
+        0 0 10px rgba(255, 215, 0, 0.5);
+      font-family: 'Cinzel', serif;
+    }
+
+    .player-cards {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100px;
+      max-height: 100px;
+      position: relative;
+      padding: 0 20px;
+      overflow: visible;
+    }
+
+    .player-card-count {
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      margin-top: 8px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    /* Карты */
+    .card {
+      width: 60px;
+      height: 84px;
+      background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
+      border-radius: 6px;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 6px;
+      box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.3),
+        inset 0 1px 1px rgba(255, 255, 255, 0.9),
+        inset 0 -1px 1px rgba(0, 0, 0, 0.1);
+      position: relative;
+      font-weight: 700;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      overflow: hidden;
+      margin-left: -25px;
+    }
+
+    .card:first-child {
+      margin-left: 0;
+    }
+
+    .card:hover {
+      transform: translateY(-15px) scale(1.15) rotate(0deg) !important;
+      box-shadow: 
+        0 8px 16px rgba(0, 0, 0, 0.5),
+        inset 0 1px 1px rgba(255, 255, 255, 0.95);
+      z-index: 100;
+      margin-left: -10px !important;
+    }
+
+    .card:hover + .card {
+      margin-left: -15px;
+    }
+
+    .card.selectable {
+      cursor: pointer;
+      border: 2px solid #ffd700;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    }
+
+    .card.selected {
+      transform: translateY(-15px) scale(1.1) rotate(0deg) !important;
+      border: 2px solid #ffed4e;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+      z-index: 50;
+      margin-left: -10px !important;
+    }
+
+    .card.trump {
+      border: 2px solid #ff0000;
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+    }
+
+    .card.red {
+      color: #dc2626;
+    }
+
+    .card.black {
+      color: #000;
+    }
+
+    .card-rank {
+      font-size: 18px;
+      line-height: 1;
+      font-weight: 900;
+    }
+
+    .card-suit {
+      font-size: 24px;
+      text-align: center;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-rank-bottom {
+      font-size: 18px;
+      line-height: 1;
+      text-align: right;
+      transform: rotate(180deg);
+      font-weight: 900;
+    }
+
+    /* Колода и козырь */
+    .deck-area {
+      position: absolute;
+      top: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 15;
+      gap: 10px;
+    }
+
+    .deck-container {
+      position: relative;
+      width: 70px;
+      height: 98px;
+    }
+
+    .deck {
+      width: 60px;
+      height: 84px;
+      background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+      background-image: 
+        repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 8px,
+          rgba(255, 255, 255, 0.1) 8px,
+          rgba(255, 255, 255, 0.1) 16px
+        );
+      border-radius: 6px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 
+        0 6px 12px rgba(0, 0, 0, 0.5),
+        inset 0 2px 4px rgba(255, 255, 255, 0.2);
+      position: absolute;
+      top: 0;
+      left: 0;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 6;
+    }
+
+    .deck:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 
+        0 8px 16px rgba(0, 0, 0, 0.6),
+        inset 0 2px 4px rgba(255, 255, 255, 0.3);
+    }
+
+    /* Визуальная стопка карт под колодой */
+    .deck-stack {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 60px;
+      height: 84px;
+    }
+
+    .deck-stack-card {
+      position: absolute;
+      width: 60px;
+      height: 84px;
+      background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+      background-image: 
+        repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 8px,
+          rgba(255, 255, 255, 0.08) 8px,
+          rgba(255, 255, 255, 0.08) 16px
+        );
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.3),
+        inset 0 1px 2px rgba(255, 255, 255, 0.1);
+    }
+
+    /* Карты стопки с небольшим смещением для эффекта глубины */
+    .deck-stack-card:nth-child(1) {
+      top: 2px;
+      left: 1px;
+      z-index: 3;
+      opacity: 0.9;
+    }
+
+    .deck-stack-card:nth-child(2) {
+      top: 4px;
+      left: 2px;
+      z-index: 2;
+      opacity: 0.8;
+    }
+
+    .deck-stack-card:nth-child(3) {
+      top: 6px;
+      left: 3px;
+      z-index: 1;
+      opacity: 0.7;
+    }
+
+    /* Козырь торчит из-под колоды */
+    .trump-card {
+      width: 60px;
+      height: 84px;
+      border-radius: 6px;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+      z-index: 0;
+      transform: rotate(-5deg);
+    }
+
+    .trump-label {
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #ffd700;
+      font-size: 12px;
+      font-weight: 700;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+      font-family: 'Cinzel', sans-serif;
+      z-index: 3;
+    }
+
+    .deck-count {
+      position: absolute;
+      bottom: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+      font-family: 'Orbitron', sans-serif;
+      z-index: 3;
+    }
+
+    /* Центральная область (отбой) - сбоку */
+    .play-area {
+      position: absolute;
+      top: 180px;
+      left: 30px;
+      width: 200px;
+      min-height: 300px;
+      max-height: 350px;
+      border: 2px dashed rgba(255, 215, 0, 0.3);
+      border-radius: 15px;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-start;
+      align-items: flex-start;
+      background: rgba(0, 0, 0, 0.2);
+      z-index: 10;
+      overflow-y: auto;
+      overflow-x: visible;
+    }
+
+    .play-area.empty::before {
+      content: 'Здесь будут карты отбоя';
+      color: rgba(255, 255, 255, 0.3);
+      font-size: 14px;
+      font-style: italic;
+    }
+
+    .attack-card, .defend-card {
+      position: relative;
+    }
+
+    .play-area .card {
+      width: 55px;
+      height: 77px;
+      margin-bottom: 5px;
+      margin-right: 5px;
+    }
+
+    .play-area .card-rank {
+      font-size: 16px;
+    }
+
+    .play-area .card-suit {
+      font-size: 22px;
+    }
+
+    .play-area .card-rank-bottom {
+      font-size: 16px;
+    }
+
+    .play-area.empty::before {
+      content: 'Здесь будут карты отбоя';
+      color: rgba(255, 255, 255, 0.3);
+      font-size: 14px;
+      font-style: italic;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    /* Кнопки управления */
+    .controls {
+      position: absolute;
+      top: 340px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+      z-index: 20;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 80%;
+    }
+
+    .control-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Montserrat', sans-serif;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      white-space: nowrap;
+    }
+
+    .control-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+    }
+
+    .control-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Сообщения */
+    .game-message {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px 40px;
+      border-radius: 15px;
+      font-size: 28px;
+      font-weight: 900;
+      color: white;
+      text-shadow: 0 0 20px currentColor;
+      font-family: 'Cinzel', serif;
+      letter-spacing: 2px;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.5s ease;
+      z-index: 100;
+      border: 3px solid;
+    }
+
+    .game-message.show {
+      opacity: 1;
+    }
+
+    .game-message.win {
+      color: #00ff00;
+      border-color: #00ff00;
+      box-shadow: 0 0 50px rgba(0, 255, 0, 0.5);
+    }
+
+    .game-message.lose {
+      color: #ff0000;
+      border-color: #ff0000;
+      box-shadow: 0 0 50px rgba(255, 0, 0, 0.5);
+    }
+
+    /* Мобильная адаптация для горизонтальной ориентации */
+    @media screen and (max-width: 900px) and (orientation: landscape) {
+      body {
+        padding: 5px;
+      }
+
+      .casino-table {
+        width: 100%;
+        height: 100vh;
+        max-height: calc(100vh - 10px);
+        max-width: 100%;
+      }
+
+      .info-bar {
+        top: 5px;
+        left: 5px;
+        right: 5px;
+        font-size: 10px;
+      }
+
+      .info-item {
+        padding: 4px 8px;
+        font-size: 10px;
+      }
+
+      .deck-area {
+        top: 40px;
+      }
+
+      .trump-label {
+        font-size: 8px;
+        top: -20px;
+      }
+
+      .deck-container {
+        width: 50px;
+        height: 70px;
+      }
+
+      .deck {
+        width: 45px;
+        height: 63px;
+      }
+
+      .trump-card {
+        width: 45px;
+        height: 63px;
+        top: 8px;
+        left: 8px;
+      }
+
+      .deck-count {
+        font-size: 9px;
+        bottom: -18px;
+      }
+
+      .play-area {
+        top: 100px;
+        left: 10px;
+        width: 150px;
+        min-height: 200px;
+        max-height: 200px;
+      }
+
+      .play-area .card {
+        width: 40px;
+        height: 56px;
+        font-size: 12px;
+      }
+
+      .controls {
+        top: 200px;
+        left: 10px;
+        gap: 5px;
+      }
+
+      .control-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 12px;
+      }
+
+      .player-positions {
+        bottom: 5px;
+        gap: 8px;
+      }
+
+      .player-position-wrapper {
+        max-width: 180px;
+      }
+
+      .player-position {
+        padding: 8px;
+      }
+
+      .player-label {
+        font-size: 11px;
+        margin-bottom: 5px;
+      }
+
+      .player-cards {
+        min-height: 70px;
+        max-height: 70px;
+        padding: 0 10px;
+      }
+
+      .card {
+        width: 40px;
+        height: 56px;
+        font-size: 10px;
+        margin-left: -15px;
+      }
+
+      .card-rank {
+        font-size: 12px;
+      }
+
+      .card-suit {
+        font-size: 14px;
+      }
+
+      .player-card-count {
+        font-size: 10px;
+        margin-top: 5px;
+      }
+
+      .game-message {
+        padding: 15px 25px;
+        font-size: 18px;
+      }
+    }
+
+    /* Мобильная адаптация для вертикальной ориентации (портрет) */
+    @media screen and (max-width: 600px) and (orientation: portrait) {
+      body {
+        padding: 5px;
+      }
+
+      .casino-table {
+        width: 100%;
+        height: calc(100vh - 80px);
+        max-height: none;
+      }
+
+
+      .deck-area {
+        top: 50px;
+      }
+
+      .player-positions {
+        bottom: 10px;
+      }
+
+      .card {
+        width: 45px;
+        height: 63px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="casino-table" id="casinoTable">
+    <!-- Информация -->
+    <div class="info-bar">
+      <div class="info-item">Ход игрока: <span id="currentPlayer">1</span></div>
+      <div class="info-item">Карт в колоде: <span id="deckCount">36</span></div>
+      <div class="info-item">Козырь: <span id="trumpSuit">♠</span></div>
+    </div>
+
+    <!-- Центральный баннер -->
+    <div class="table-info">
+      ДУРАК | ЦЕЛЬ: ИЗБАВИТЬСЯ ОТ ВСЕХ КАРТ | БИТЬ СТАРШЕЙ КАРТОЙ ТОЙ ЖЕ МАСТИ ИЛИ КОЗЫРЕМ
+    </div>
+
+    <!-- Колода и козырь -->
+    <div class="deck-area">
+      <div class="trump-label">КОЗЫРЬ</div>
+      <div class="deck-container">
+        <div class="trump-card" id="trumpCard"></div>
+        <div class="deck-stack" id="deckStack">
+          <div class="deck-stack-card"></div>
+          <div class="deck-stack-card"></div>
+          <div class="deck-stack-card"></div>
+        </div>
+        <div class="deck" id="deck"></div>
+        <div class="deck-count" id="deckCountNum">36</div>
+      </div>
+    </div>
+
+    <!-- Область отбоя -->
+    <div class="play-area empty" id="playArea"></div>
+
+    <!-- Кнопки управления -->
+    <div class="controls">
+      <button class="control-btn" id="attackBtn" disabled>Атаковать</button>
+      <button class="control-btn" id="defendBtn" disabled>Бить</button>
+      <button class="control-btn" id="takeBtn" disabled>Взять</button>
+      <button class="control-btn" id="passBtn" disabled>Пас</button>
+      <button class="control-btn" id="dealBtn">Раздать</button>
+    </div>
+
+    <!-- Игровые позиции -->
+    <div class="player-positions">
+      <div class="player-position-wrapper">
+        <div class="player-position active" data-position="0">
+          <div class="player-label">ИГРОК 1</div>
+          <div class="player-cards" id="playerCards0"></div>
+          <div class="player-card-count" id="playerCount0">0 карт</div>
+        </div>
+      </div>
+      <div class="player-position-wrapper">
+        <div class="player-position" data-position="1">
+          <div class="player-label">ИГРОК 2</div>
+          <div class="player-cards" id="playerCards1"></div>
+          <div class="player-card-count" id="playerCount1">0 карт</div>
+        </div>
+      </div>
+      <div class="player-position-wrapper">
+        <div class="player-position" data-position="2">
+          <div class="player-label">ИГРОК 3</div>
+          <div class="player-cards" id="playerCards2"></div>
+          <div class="player-card-count" id="playerCount2">0 карт</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Сообщения -->
+  <div class="game-message" id="gameMessage"></div>
+
+  <script>
+    (function() {
+      // Игровые переменные
+      let deck = [];
+      let players = [[], [], []]; // Три игрока
+      let trumpSuit = '';
+      let trumpCard = null;
+      let currentPlayer = 0; // Текущий ходящий игрок
+      let isDefending = false; // Режим отбоя
+      let attackingCards = []; // Карты в отбое (атака)
+      let defendingCards = []; // Карты в отбое (защита)
+      let gameInProgress = false;
+      let selectedCards = [];
+
+      // Масти и достоинства
+      const suits = ['♠', '♥', '♦', '♣'];
+      const ranks = ['6', '7', '8', '9', '10', 'В', 'Д', 'К', 'Т'];
+      const rankValues = { '6': 6, '7': 7, '8': 8, '9': 9, '10': 10, 'В': 11, 'Д': 12, 'К': 13, 'Т': 14 };
+
+      // Элементы
+      const playerCardsEls = [
+        document.querySelector('#playerCards0'),
+        document.querySelector('#playerCards1'),
+        document.querySelector('#playerCards2')
+      ];
+      const playerCountEls = [
+        document.querySelector('#playerCount0'),
+        document.querySelector('#playerCount1'),
+        document.querySelector('#playerCount2')
+      ];
+      const deckEl = document.querySelector('#deck');
+      const deckCountEl = document.querySelector('#deckCountNum');
+      const trumpCardEl = document.querySelector('#trumpCard');
+      const trumpSuitEl = document.querySelector('#trumpSuit');
+      const playAreaEl = document.querySelector('#playArea');
+      const attackBtn = document.querySelector('#attackBtn');
+      const defendBtn = document.querySelector('#defendBtn');
+      const takeBtn = document.querySelector('#takeBtn');
+      const passBtn = document.querySelector('#passBtn');
+      const dealBtn = document.querySelector('#dealBtn');
+      const gameMessage = document.querySelector('#gameMessage');
+      const playerPositions = document.querySelectorAll('.player-position');
+
+      // Создание колоды
+      function createDeck() {
+        const newDeck = [];
+        suits.forEach(suit => {
+          ranks.forEach(rank => {
+            newDeck.push({ suit, rank, value: rankValues[rank] });
+          });
+        });
+        return shuffleDeck(newDeck);
+      }
+
+      // Перемешивание
+      function shuffleDeck(deck) {
+        const shuffled = [...deck];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
+      }
+
+      // Раздача карт
+      function dealCards() {
+        deck = createDeck();
+        players = [[], [], []];
+        attackingCards = [];
+        defendingCards = [];
+        selectedCards = [];
+        gameInProgress = true;
+
+        // Определяем козырь
+        trumpCard = deck.pop();
+        trumpSuit = trumpCard.suit;
+        displayTrumpCard();
+
+        // Раздаем по 6 карт каждому
+        for (let i = 0; i < 6; i++) {
+          players[0].push(deck.pop());
+          players[1].push(deck.pop());
+          players[2].push(deck.pop());
+        }
+
+        // Сортируем карты
+        players.forEach(hand => {
+          hand.sort((a, b) => {
+            if (a.suit === trumpSuit && b.suit !== trumpSuit) return -1;
+            if (a.suit !== trumpSuit && b.suit === trumpSuit) return 1;
+            if (a.suit !== b.suit) return suits.indexOf(a.suit) - suits.indexOf(b.suit);
+            return a.value - b.value;
+          });
+        });
+
+        currentPlayer = 0;
+        isDefending = false;
+        updateDisplay();
+        updateButtons();
+        setActivePosition(0);
+      }
+
+      // Отображение козыря
+      function displayTrumpCard() {
+        const isRed = trumpCard.suit === '♥' || trumpCard.suit === '♦';
+        trumpCardEl.className = `card ${isRed ? 'red' : 'black'} trump`;
+        trumpCardEl.innerHTML = `
+          <div class="card-rank">${trumpCard.rank}</div>
+          <div class="card-suit">${trumpCard.suit}</div>
+          <div class="card-rank-bottom">${trumpCard.rank}</div>
+        `;
+        trumpSuitEl.textContent = trumpCard.suit;
+      }
+
+      // Создание элемента карты
+      function createCardElement(card, playerIndex, isSelectable = false, indexInHand = 0, totalCards = 0) {
+        const cardEl = document.createElement('div');
+        const isRed = card.suit === '♥' || card.suit === '♦';
+        const isTrump = card.suit === trumpSuit;
+        
+        cardEl.className = `card ${isRed ? 'red' : 'black'} ${isTrump ? 'trump' : ''}`;
+        if (isSelectable) {
+          cardEl.classList.add('selectable');
+        }
+        
+        // Эффект веера для карт игроков (не в области отбоя)
+        if (playerIndex >= 0 && totalCards > 0) {
+          const maxRotation = 15; // Максимальный угол поворота
+          const cardCount = totalCards;
+          const centerIndex = (cardCount - 1) / 2;
+          const offset = indexInHand - centerIndex;
+          const rotation = (offset / centerIndex) * maxRotation;
+          
+          cardEl.style.transform = `rotate(${rotation}deg)`;
+          cardEl.style.transformOrigin = 'center bottom';
+          
+          // Добавляем небольшое смещение по вертикали
+          const verticalOffset = Math.abs(offset) * 2;
+          cardEl.style.transform += ` translateY(-${verticalOffset}px)`;
+        }
+        
+        cardEl.innerHTML = `
+          <div class="card-rank">${card.rank}</div>
+          <div class="card-suit">${card.suit}</div>
+          <div class="card-rank-bottom">${card.rank}</div>
+        `;
+
+        if (isSelectable && playerIndex === 0) {
+          cardEl.addEventListener('click', () => toggleCard(card, cardEl));
+        }
+
+        return cardEl;
+      }
+
+      // Переключение выбора карты
+      function toggleCard(card, cardEl) {
+        const index = selectedCards.findIndex(c => c === card);
+        if (index === -1) {
+          selectedCards.push(card);
+          cardEl.classList.add('selected');
+        } else {
+          selectedCards.splice(index, 1);
+          cardEl.classList.remove('selected');
+          // Восстанавливаем исходную позицию при снятии выделения
+          const hand = players[0];
+          const cardIndex = hand.indexOf(card);
+          if (cardIndex !== -1) {
+            updateDisplay();
+          }
+        }
+        updateButtons();
+      }
+
+      // Обновление отображения
+      function updateDisplay() {
+        players.forEach((hand, idx) => {
+          playerCardsEls[idx].innerHTML = '';
+          const isSelectable = idx === 0 && gameInProgress;
+          hand.forEach((card, cardIndex) => {
+            const cardEl = createCardElement(card, idx, isSelectable, cardIndex, hand.length);
+            playerCardsEls[idx].appendChild(cardEl);
+          });
+          playerCountEls[idx].textContent = `${hand.length} карт`;
+        });
+
+        // Обновляем область отбоя
+        playAreaEl.innerHTML = '';
+        playAreaEl.classList.remove('empty');
+        
+        attackingCards.forEach((card, idx) => {
+          const cardEl = createCardElement(card, -1);
+          cardEl.classList.add('attack-card');
+          playAreaEl.appendChild(cardEl);
+          
+          if (defendingCards[idx]) {
+            const defendEl = createCardElement(defendingCards[idx], -1);
+            defendEl.classList.add('defend-card');
+            playAreaEl.appendChild(defendEl);
+          }
+        });
+
+        if (attackingCards.length === 0) {
+          playAreaEl.classList.add('empty');
+        }
+
+        // Обновляем счетчик колоды
+        deckCountEl.textContent = deck.length;
+      }
+
+      // Установка активной позиции
+      function setActivePosition(index) {
+        playerPositions.forEach((pos, idx) => {
+          if (idx === index) {
+            pos.classList.add('active');
+          } else {
+            pos.classList.remove('active');
+          }
+        });
+      }
+
+      // Обновление кнопок
+      function updateButtons() {
+        const isMyTurn = currentPlayer === 0 && gameInProgress;
+        const hasSelected = selectedCards.length > 0;
+        const hasAttack = attackingCards.length > 0;
+
+        if (!gameInProgress) {
+          dealBtn.disabled = false;
+          attackBtn.disabled = true;
+          defendBtn.disabled = true;
+          takeBtn.disabled = true;
+          passBtn.disabled = true;
+          return;
+        }
+
+        dealBtn.disabled = true;
+
+        if (isMyTurn) {
+          if (!isDefending && !hasAttack) {
+            // Можем атаковать
+            attackBtn.disabled = !hasSelected || selectedCards.length > players[0].length;
+            defendBtn.disabled = true;
+            takeBtn.disabled = true;
+            passBtn.disabled = true;
+          } else if (isDefending && hasAttack) {
+            // Должны бить
+            attackBtn.disabled = true;
+            defendBtn.disabled = hasSelected && !canDefend(selectedCards[0], attackingCards[defendingCards.length]);
+            takeBtn.disabled = false;
+            passBtn.disabled = true;
+          } else if (!isDefending && hasAttack) {
+            // Можем подкинуть или пас
+            attackBtn.disabled = !hasSelected || !canAttack(selectedCards[0]);
+            defendBtn.disabled = true;
+            takeBtn.disabled = true;
+            passBtn.disabled = selectedCards.length > 0;
+          }
+        } else {
+          attackBtn.disabled = true;
+          defendBtn.disabled = true;
+          takeBtn.disabled = true;
+          passBtn.disabled = true;
+        }
+      }
+
+      // Может ли карта бить
+      function canDefend(defendCard, attackCard) {
+        if (!attackCard) return false;
+        // Козырь бьет не-козырь
+        if (defendCard.suit === trumpSuit && attackCard.suit !== trumpSuit) return true;
+        // Не-козырь не бьет козырь
+        if (defendCard.suit !== trumpSuit && attackCard.suit === trumpSuit) return false;
+        // Той же масти старше
+        if (defendCard.suit === attackCard.suit && defendCard.value > attackCard.value) return true;
+        return false;
+      }
+
+      // Может ли карта атаковать (подкинуть)
+      function canAttack(card) {
+        if (attackingCards.length === 0) return true;
+        // Проверяем, есть ли такая же масть или значение
+        return attackingCards.some(c => c.suit === card.suit || c.rank === card.rank) ||
+               defendingCards.some(c => c.suit === card.suit || c.rank === card.rank);
+      }
+
+      // Атака
+      function attack() {
+        if (selectedCards.length === 0) return;
+        
+        selectedCards.forEach(card => {
+          const index = players[0].findIndex(c => c === card);
+          if (index !== -1) {
+            players[0].splice(index, 1);
+            attackingCards.push(card);
+          }
+        });
+
+        selectedCards = [];
+        isDefending = true;
+        updateDisplay();
+        
+        // Переходим к следующему игроку (защитнику)
+        const nextPlayer = (currentPlayer + 1) % 3;
+        if (nextPlayer !== 0) {
+          // AI защита
+          setTimeout(() => aiDefend(nextPlayer), 1000);
+        } else {
+          updateButtons();
+        }
+      }
+
+      // Защита
+      function defend() {
+        if (selectedCards.length === 0 || defendingCards.length >= attackingCards.length) return;
+        
+        const attackCard = attackingCards[defendingCards.length];
+        const defendCard = selectedCards[0];
+        
+        if (!canDefend(defendCard, attackCard)) {
+          showMessage('Не могу бить этой картой!', 'lose');
+          return;
+        }
+
+        const index = players[0].findIndex(c => c === defendCard);
+        if (index !== -1) {
+          players[0].splice(index, 1);
+          defendingCards.push(defendCard);
+          selectedCards = [];
+        }
+
+        // Если все отбиты, очищаем отбой
+        if (defendingCards.length >= attackingCards.length) {
+          clearPlayArea();
+          nextTurn();
+        } else {
+          updateDisplay();
+          updateButtons();
+        }
+      }
+
+      // Взять карты
+      function take() {
+        // Берем все карты из отбоя
+        players[0].push(...attackingCards, ...defendingCards);
+        clearPlayArea();
+        // Добираем до 6
+        while (players[0].length < 6 && deck.length > 0) {
+          players[0].push(deck.pop());
+        }
+        nextTurn();
+      }
+
+      // Пас
+      function pass() {
+        clearPlayArea();
+        nextTurn();
+      }
+
+      // Очистка отбоя
+      function clearPlayArea() {
+        attackingCards = [];
+        defendingCards = [];
+        selectedCards = [];
+        isDefending = false;
+        updateDisplay();
+      }
+
+      // Следующий ход
+      function nextTurn() {
+        // Добираем карты
+        players.forEach((hand, idx) => {
+          while (hand.length < 6 && deck.length > 0) {
+            hand.push(deck.pop());
+          }
+          // Сортируем
+          hand.sort((a, b) => {
+            if (a.suit === trumpSuit && b.suit !== trumpSuit) return -1;
+            if (a.suit !== trumpSuit && b.suit === trumpSuit) return 1;
+            if (a.suit !== b.suit) return suits.indexOf(a.suit) - suits.indexOf(b.suit);
+            return a.value - b.value;
+          });
+        });
+
+        // Проверяем победителей
+        const winners = players.map((hand, idx) => ({ idx, count: hand.length })).filter(p => p.count === 0);
+        if (winners.length > 0) {
+          showMessage(`Игрок ${winners[0].idx + 1} выиграл!`, 'win');
+          gameInProgress = false;
+          updateButtons();
+          return;
+        }
+
+        currentPlayer = (currentPlayer + 1) % 3;
+        isDefending = false;
+        updateDisplay();
+        setActivePosition(currentPlayer);
+        
+        if (currentPlayer !== 0) {
+          setTimeout(() => aiTurn(currentPlayer), 1000);
+        } else {
+          updateButtons();
+        }
+      }
+
+      // AI ход
+      function aiTurn(playerIndex) {
+        if (!gameInProgress) return;
+        
+        if (isDefending && attackingCards.length > defendingCards.length) {
+          aiDefend(playerIndex);
+        } else {
+          aiAttack(playerIndex);
+        }
+      }
+
+      // AI защита
+      function aiDefend(playerIndex) {
+        const hand = players[playerIndex];
+        const attackCard = attackingCards[defendingCards.length];
+        
+        // Ищем карту для отбоя
+        const defendCard = hand.find(card => canDefend(card, attackCard));
+        
+        if (defendCard) {
+          const index = hand.findIndex(c => c === defendCard);
+          hand.splice(index, 1);
+          defendingCards.push(defendCard);
+          
+          updateDisplay();
+          
+          if (defendingCards.length >= attackingCards.length) {
+            clearPlayArea();
+            setTimeout(() => nextTurn(), 1000);
+          } else {
+            setTimeout(() => aiDefend(playerIndex), 1000);
+          }
+        } else {
+          // Не может бить - берет
+          hand.push(...attackingCards, ...defendingCards);
+          clearPlayArea();
+          setTimeout(() => nextTurn(), 1500);
+        }
+      }
+
+      // AI атака
+      function aiAttack(playerIndex) {
+        const hand = players[playerIndex];
+        if (hand.length === 0) {
+          nextTurn();
+          return;
+        }
+
+        if (attackingCards.length === 0) {
+          // Первая атака - берем самую младшую
+          const card = hand[0];
+          hand.splice(0, 1);
+          attackingCards.push(card);
+          isDefending = true;
+          updateDisplay();
+          
+          const nextPlayer = (playerIndex + 1) % 3;
+          if (nextPlayer !== 0) {
+            setTimeout(() => aiDefend(nextPlayer), 1000);
+          }
+        } else {
+          // Подкидываем, если можем
+          const canAdd = hand.find(card => canAttack(card));
+          if (canAdd && attackingCards.length + defendingCards.length < 6) {
+            const index = hand.findIndex(c => c === canAdd);
+            hand.splice(index, 1);
+            attackingCards.push(canAdd);
+            updateDisplay();
+            setTimeout(() => aiAttack(playerIndex), 800);
+          } else {
+            // Пас
+            clearPlayArea();
+            setTimeout(() => nextTurn(), 1000);
+          }
+        }
+      }
+
+      // Показ сообщения
+      function showMessage(text, type) {
+        gameMessage.textContent = text;
+        gameMessage.className = `game-message ${type} show`;
+        setTimeout(() => {
+          gameMessage.classList.remove('show');
+        }, 3000);
+      }
+
+      // События
+      attackBtn.addEventListener('click', attack);
+      defendBtn.addEventListener('click', defend);
+      takeBtn.addEventListener('click', take);
+      passBtn.addEventListener('click', pass);
+      dealBtn.addEventListener('click', dealCards);
+
+      // Инициализация
+      updateDisplay();
+      updateButtons();
+    })();
+  </script>
+</body>
+</html>
+
