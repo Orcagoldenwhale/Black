@@ -1782,19 +1782,88 @@
         balanceEl.textContent = balance;
         winAmountEl.textContent = totalWin;
         
-        if (totalWin > 0) {
-          showMessage(`Выигрыш: ${totalWin}★!`, 'win');
-          if (typeof confetti !== 'undefined') {
-            confetti({
-              particleCount: 100,
-              spread: 70,
-              origin: { y: 0.6 }
-            });
+        // Показываем сообщения о выигрышах для всех игроков
+        let messageDelay = 0;
+        const messageQueue = [];
+        
+        // Проверяем выигрыши игроков
+        playerHands.forEach((hand, idx) => {
+          const playerScore = calculateScore(hand);
+          let win = 0;
+          let playerName = '';
+          
+          if (idx === 0) {
+            playerName = 'YOU';
+          } else {
+            playerName = 'Anonymous';
           }
-        } else if (allBust) {
-          showMessage('Все переборы!', 'lose');
-        } else {
-          showMessage('Ничья!', 'draw');
+          
+          if (playerScore > 21) {
+            // Перебор - проигрыш
+          } else if (playerScore === 21 && hand.length === 2) {
+            // Блэкджек
+            win = currentBet * 2.5;
+            if (dealerScore !== 21 || dealerHand.length !== 2) {
+              messageQueue.push({ text: `${playerName} выиграл: ${win}★ (Блэкджек)!`, type: 'win', delay: messageDelay });
+              messageDelay += 2500;
+            }
+          } else if (dealerScore > 21 || playerScore > dealerScore) {
+            // Выигрыш
+            win = currentBet * 2;
+            messageQueue.push({ text: `${playerName} выиграл: ${win}★!`, type: 'win', delay: messageDelay });
+            messageDelay += 2500;
+          } else if (playerScore === dealerScore) {
+            // Ничья
+            win = currentBet;
+            messageQueue.push({ text: `${playerName}: Ничья!`, type: 'draw', delay: messageDelay });
+            messageDelay += 2000;
+          } else if (dealerScore <= 21 && dealerScore > playerScore) {
+            // Проигрыш дилеру
+            messageQueue.push({ text: `${playerName} проиграл дилеру!`, type: 'lose', delay: messageDelay });
+            messageDelay += 2000;
+          }
+        });
+        
+        // Проверяем выигрыш дилера
+        let dealerWins = 0;
+        playerHands.forEach((hand, idx) => {
+          const playerScore = calculateScore(hand);
+          if (playerScore <= 21 && dealerScore <= 21 && dealerScore > playerScore) {
+            dealerWins++;
+          } else if (playerScore > 21 && dealerScore <= 21) {
+            dealerWins++;
+          }
+        });
+        
+        if (dealerWins > 0 && dealerScore <= 21) {
+          const dealerWinAmount = dealerWins * currentBet;
+          messageQueue.push({ text: `Дилер выиграл: ${dealerWinAmount}★!`, type: 'lose', delay: messageDelay });
+          messageDelay += 2500;
+        }
+        
+        // Показываем сообщения последовательно
+        messageQueue.forEach(msg => {
+          setTimeout(() => {
+            showMessage(msg.text, msg.type);
+            if (msg.type === 'win' && msg.text.includes('YOU')) {
+              if (typeof confetti !== 'undefined') {
+                confetti({
+                  particleCount: 100,
+                  spread: 70,
+                  origin: { y: 0.6 }
+                });
+              }
+            }
+          }, msg.delay);
+        });
+        
+        // Если нет сообщений, показываем общее
+        if (messageQueue.length === 0) {
+          if (allBust) {
+            showMessage('Все переборы!', 'lose');
+          } else if (totalWin === 0 && dealerWins === 0) {
+            showMessage('Ничья!', 'draw');
+          }
         }
         
         updateButtons();
