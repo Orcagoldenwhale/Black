@@ -1034,58 +1034,41 @@
         bottom: auto;
         left: 0;
         transform: none;
-        flex-direction: column;
-        gap: 10px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px;
         width: 100%;
         margin-top: 10px;
         order: 2;
-        align-items: center;
+        align-items: flex-start;
+        justify-content: center;
       }
 
       .player-position-wrapper {
-        width: 100%;
-        max-width: none;
         flex: none;
       }
 
-      /* YOU - сверху, центр, больше */
+      /* YOU - сверху, занимает всю ширину */
       .player-position-wrapper:nth-child(2) {
         order: 1;
-        flex: none;
+        flex: 0 0 100%;
         max-width: 100%;
         width: 100%;
+        margin-bottom: 10px;
       }
 
-      /* Player 2 и 3 - в ряд под YOU */
-      .player-position-wrapper:first-child,
-      .player-position-wrapper:nth-child(3) {
-        flex: 1;
-        max-width: 48%;
-      }
-
-      /* Player 2 - слева под YOU */
+      /* Player 2 - слева под YOU, меньше */
       .player-position-wrapper:first-child {
         order: 2;
+        flex: 0 0 calc(50% - 4px);
+        max-width: calc(50% - 4px);
       }
 
-      /* Player 3 - справа под YOU */
+      /* Player 3 - справа под YOU, меньше */
       .player-position-wrapper:nth-child(3) {
         order: 3;
-      }
-
-      /* Обертка для Player 2 и 3 - в ряд */
-      .player-positions::after {
-        content: '';
-        order: 2;
-        display: flex;
-        width: 100%;
-        gap: 4%;
-        margin-top: -10px;
-      }
-
-      /* Контейнер для игроков 2 и 3 в ряд */
-      .player-positions {
-        flex-wrap: wrap;
+        flex: 0 0 calc(50% - 4px);
+        max-width: calc(50% - 4px);
       }
 
       .player-position {
