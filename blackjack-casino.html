@@ -1566,12 +1566,13 @@
       }
 
       function dealCards() {
-        if (balance < currentBet * 3) {
+        if (balance < currentBet) {
           showMessage('Недостаточно средств!', 'lose');
           return;
         }
         
-        balance -= currentBet * 3;
+        // Списываем ставку только за игрока YOU (позиция 0)
+        balance -= currentBet;
         balanceEl.textContent = balance;
         
         // Очистка
@@ -1738,6 +1739,7 @@
         gameInProgress = false;
         renderCards();
         
+        // Рассчитываем выигрыш только для игрока YOU (позиция 0)
         let totalWin = 0;
         let allBust = true;
         
@@ -1750,15 +1752,21 @@
           } else if (playerScore === 21 && hand.length === 2) {
             // Блэкджек
             win = currentBet * 2.5;
-            totalWin += win;
+            if (idx === 0) { // Только для YOU
+              totalWin += win;
+            }
             allBust = false;
           } else if (dealerScore > 21 || playerScore > dealerScore) {
             win = currentBet * 2;
-            totalWin += win;
+            if (idx === 0) { // Только для YOU
+              totalWin += win;
+            }
             allBust = false;
           } else if (playerScore === dealerScore) {
             win = currentBet;
-            totalWin += win;
+            if (idx === 0) { // Только для YOU
+              totalWin += win;
+            }
             allBust = false;
           }
           
@@ -1769,6 +1777,7 @@
           }
         });
         
+        // Начисляем выигрыш только на баланс YOU
         balance += totalWin;
         balanceEl.textContent = balance;
         winAmountEl.textContent = totalWin;
