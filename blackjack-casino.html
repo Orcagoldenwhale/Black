@@ -1342,13 +1342,12 @@
       }
 
       function hit() {
-        if (!gameInProgress) return;
+        if (!gameInProgress || currentPosition !== 0) return; // Только для YOU (позиция 0)
         
-        const hand = playerHands[currentPosition];
         dealCardToPosition(currentPosition, false, false, 0);
         
         setTimeout(() => {
-          const score = calculateScore(hand);
+          const score = calculateScore(playerHands[currentPosition]);
           if (score > 21) {
             playerScoreEls[currentPosition].textContent = `Очки: ${score} (Перебор!)`;
             moveToNextPosition();
@@ -1360,7 +1359,7 @@
       }
 
       function stand() {
-        if (!gameInProgress) return;
+        if (!gameInProgress || currentPosition !== 0) return; // Только для YOU (позиция 0)
         moveToNextPosition();
       }
 
@@ -1382,6 +1381,8 @@
         function playNextAI() {
           if (aiPosition > 2) {
             // Все AI игроки сыграли, ход дилера
+            // Убираем активность с последнего AI игрока
+            setActivePosition(-1);
             dealerTurn();
             return;
           }
@@ -1389,8 +1390,7 @@
           setActivePosition(aiPosition);
           
           // Простой алгоритм: если сумма < 16, берем карту, иначе не берем
-          const hand = playerHands[aiPosition];
-          const score = calculateScore(hand);
+          const score = calculateScore(playerHands[aiPosition]);
           
           if (score < 16 && score <= 21) {
             // Берем карту
@@ -1404,7 +1404,7 @@
                 setTimeout(playNextAI, 1000);
               } else if (newScore < 16) {
                 // Продолжаем брать карты
-                playNextAI();
+                setTimeout(playNextAI, 800);
               } else {
                 // >= 16, не берем, переходим к следующему
                 aiPosition++;
@@ -1423,14 +1423,19 @@
       }
 
       function setActivePosition(position) {
-        playerPositions.forEach((pos, idx) => {
-          if (idx === position) {
+        // Используем data-position вместо индекса массива
+        playerPositions.forEach((pos) => {
+          const posValue = parseInt(pos.getAttribute('data-position'));
+          if (posValue === position && position >= 0) {
             pos.classList.add('active');
           } else {
             pos.classList.remove('active');
           }
         });
-        currentPosition = position;
+        if (position >= 0) {
+          currentPosition = position;
+        }
+        updateButtons();
       }
 
       function dealerTurn() {
