@@ -7,11 +7,21 @@
 - **Blackjack Casino** - `blackjack-casino.html`
 - **Durak Casino** - `durak-casino.html`
 
-## 🌐 Онлайн
+## 🌐 Онлайн - Быстрый деплой
 
-- Blackjack: https://zingy-croissant-2baeff.netlify.app/blackjack-casino.html
-- Durak: https://zingy-croissant-2baeff.netlify.app/durak-casino.html
+### Вариант 1: GitHub Pages (Рекомендуется)
+1. Перейдите: https://github.com/Orcagoldenwhale/Black/settings/pages
+2. Выберите: Branch `main`, Folder `/ (root)`
+3. Нажмите "Save"
+4. Через 1-2 минуты ваша ссылка: `https://orcagoldenwhale.github.io/Black/`
 
-## 🚀 Запуск
+### Вариант 2: Vercel (Самый быстрый)
+1. Перейдите: https://vercel.com
+2. Войдите через GitHub
+3. Выберите репозиторий "Black"
+4. Нажмите "Deploy"
+5. Получите ссылку автоматически!
+
+## 🚀 Локальный запуск
 
 Откройте HTML файлы в браузере.
