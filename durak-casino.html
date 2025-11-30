@@ -332,6 +332,38 @@
       color: #000;
     }
 
+    /* Обратная сторона карты (рубашка) для AI игроков */
+    .card-back {
+      background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+      background-image: 
+        repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 8px,
+          rgba(255, 255, 255, 0.08) 8px,
+          rgba(255, 255, 255, 0.08) 16px
+        ),
+        repeating-linear-gradient(
+          -45deg,
+          transparent,
+          transparent 8px,
+          rgba(255, 255, 255, 0.08) 8px,
+          rgba(255, 255, 255, 0.08) 16px
+        );
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      transform: none !important;
+      margin-left: -15px !important;
+    }
+
+    .card-back::before {
+      display: none;
+    }
+
     .card-rank {
       font-size: 18px;
       line-height: 1;
@@ -924,7 +956,7 @@
         font-size: 16px;
       }
 
-      /* Игроки - компактно */
+      /* Игроки - компактно, YOU вверху */
       .player-positions {
         position: relative;
         bottom: auto;
@@ -938,6 +970,29 @@
         order: 5;
         align-items: flex-start;
         justify-content: center;
+      }
+
+      /* YOU - сверху, занимает всю ширину */
+      .player-position-wrapper:nth-child(2) {
+        order: 1;
+        flex: 0 0 100%;
+        max-width: 100%;
+        width: 100%;
+        margin-bottom: 10px;
+      }
+
+      /* Player 2 - слева под YOU */
+      .player-position-wrapper:first-child {
+        order: 2;
+        flex: 0 0 calc(50% - 4px);
+        max-width: calc(50% - 4px);
+      }
+
+      /* Player 3 - справа под YOU */
+      .player-position-wrapper:nth-child(3) {
+        order: 3;
+        flex: 0 0 calc(50% - 4px);
+        max-width: calc(50% - 4px);
       }
 
       .player-position-wrapper {
@@ -1174,38 +1229,49 @@
       // Создание элемента карты
       function createCardElement(card, playerIndex, isSelectable = false, indexInHand = 0, totalCards = 0) {
         const cardEl = document.createElement('div');
-        const isRed = card.suit === '♥' || card.suit === '♦';
-        const isTrump = card.suit === trumpSuit;
         
-        cardEl.className = `card ${isRed ? 'red' : 'black'} ${isTrump ? 'trump' : ''}`;
-        if (isSelectable) {
-          cardEl.classList.add('selectable');
-        }
+        // Для AI игроков (1 и 2) показываем рубашку во время игры
+        const shouldHideCard = (playerIndex === 1 || playerIndex === 2) && gameInProgress && playerIndex >= 0;
         
-        // Эффект веера для карт игроков (не в области отбоя)
-        if (playerIndex >= 0 && totalCards > 0) {
-          const maxRotation = 15; // Максимальный угол поворота
-          const cardCount = totalCards;
-          const centerIndex = (cardCount - 1) / 2;
-          const offset = indexInHand - centerIndex;
-          const rotation = (offset / centerIndex) * maxRotation;
+        if (shouldHideCard) {
+          // Показываем рубашку для AI игроков
+          cardEl.className = 'card card-back';
+          cardEl.innerHTML = '🂠';
+        } else {
+          // Показываем карту для YOU или когда игра не идет
+          const isRed = card.suit === '♥' || card.suit === '♦';
+          const isTrump = card.suit === trumpSuit;
           
-          cardEl.style.transform = `rotate(${rotation}deg)`;
-          cardEl.style.transformOrigin = 'center bottom';
+          cardEl.className = `card ${isRed ? 'red' : 'black'} ${isTrump ? 'trump' : ''}`;
+          if (isSelectable) {
+            cardEl.classList.add('selectable');
+          }
           
-          // Добавляем небольшое смещение по вертикали
-          const verticalOffset = Math.abs(offset) * 2;
-          cardEl.style.transform += ` translateY(-${verticalOffset}px)`;
-        }
-        
-        cardEl.innerHTML = `
-          <div class="card-rank">${card.rank}</div>
-          <div class="card-suit">${card.suit}</div>
-          <div class="card-rank-bottom">${card.rank}</div>
-        `;
+          // Эффект веера для карт игроков (не в области отбоя)
+          if (playerIndex >= 0 && totalCards > 0) {
+            const maxRotation = 15; // Максимальный угол поворота
+            const cardCount = totalCards;
+            const centerIndex = (cardCount - 1) / 2;
+            const offset = indexInHand - centerIndex;
+            const rotation = (offset / centerIndex) * maxRotation;
+            
+            cardEl.style.transform = `rotate(${rotation}deg)`;
+            cardEl.style.transformOrigin = 'center bottom';
+            
+            // Добавляем небольшое смещение по вертикали
+            const verticalOffset = Math.abs(offset) * 2;
+            cardEl.style.transform += ` translateY(-${verticalOffset}px)`;
+          }
+          
+          cardEl.innerHTML = `
+            <div class="card-rank">${card.rank}</div>
+            <div class="card-suit">${card.suit}</div>
+            <div class="card-rank-bottom">${card.rank}</div>
+          `;
 
-        if (isSelectable && playerIndex === 0) {
-          cardEl.addEventListener('click', () => toggleCard(card, cardEl));
+          if (isSelectable && playerIndex === 0) {
+            cardEl.addEventListener('click', () => toggleCard(card, cardEl));
+          }
         }
 
         return cardEl;
