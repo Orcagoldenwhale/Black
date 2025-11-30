@@ -409,14 +409,51 @@
     .deck {
       width: 60px;
       height: 84px;
-      background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+      background: #2c5282;
       background-image: 
+        /* Клетчатый/тартановый узор */
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 6px,
+          rgba(79, 172, 254, 0.4) 6px,
+          rgba(79, 172, 254, 0.4) 12px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 6px,
+          rgba(34, 197, 94, 0.4) 6px,
+          rgba(34, 197, 94, 0.4) 12px
+        ),
         repeating-linear-gradient(
           45deg,
-          transparent,
-          transparent 8px,
-          rgba(255, 255, 255, 0.1) 8px,
-          rgba(255, 255, 255, 0.1) 16px
+          rgba(79, 172, 254, 0.3) 0px,
+          rgba(79, 172, 254, 0.3) 4px,
+          transparent 4px,
+          transparent 8px
+        ),
+        repeating-linear-gradient(
+          -45deg,
+          rgba(34, 197, 94, 0.3) 0px,
+          rgba(34, 197, 94, 0.3) 4px,
+          transparent 4px,
+          transparent 8px
+        ),
+        /* Белые линии для узора */
+        repeating-linear-gradient(
+          0deg,
+          rgba(255, 255, 255, 0.1) 0px,
+          rgba(255, 255, 255, 0.1) 2px,
+          transparent 2px,
+          transparent 12px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0.1) 0px,
+          rgba(255, 255, 255, 0.1) 2px,
+          transparent 2px,
+          transparent 12px
         );
       border-radius: 6px;
       border: 2px solid rgba(255, 255, 255, 0.3);
@@ -451,14 +488,35 @@
       position: absolute;
       width: 60px;
       height: 84px;
-      background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+      background: #2c5282;
       background-image: 
         repeating-linear-gradient(
-          45deg,
+          0deg,
           transparent,
-          transparent 8px,
-          rgba(255, 255, 255, 0.08) 8px,
-          rgba(255, 255, 255, 0.08) 16px
+          transparent 6px,
+          rgba(79, 172, 254, 0.4) 6px,
+          rgba(79, 172, 254, 0.4) 12px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 6px,
+          rgba(34, 197, 94, 0.4) 6px,
+          rgba(34, 197, 94, 0.4) 12px
+        ),
+        repeating-linear-gradient(
+          45deg,
+          rgba(79, 172, 254, 0.3) 0px,
+          rgba(79, 172, 254, 0.3) 4px,
+          transparent 4px,
+          transparent 8px
+        ),
+        repeating-linear-gradient(
+          -45deg,
+          rgba(34, 197, 94, 0.3) 0px,
+          rgba(34, 197, 94, 0.3) 4px,
+          transparent 4px,
+          transparent 8px
         );
       border-radius: 6px;
       border: 1px solid rgba(255, 255, 255, 0.2);
@@ -908,13 +966,50 @@
       }
 
       .deck-container {
-        width: 60px;
-        height: 84px;
+        width: 75px;
+        height: 105px;
+      }
+
+      .deck {
+        width: 75px;
+        height: 105px;
+      }
+
+      .trump-card {
+        width: 75px;
+        height: 105px;
+        top: 15px;
+        left: 15px;
+        transform: rotate(-5deg);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7);
+        z-index: 5;
       }
 
       .trump-label {
-        font-size: 10px;
-        top: -15px;
+        font-size: 13px;
+        top: -22px;
+        font-weight: 900;
+        text-shadow: 
+          2px 2px 4px rgba(0, 0, 0, 1),
+          0 0 12px rgba(255, 215, 0, 0.9);
+      }
+
+      .deck-count {
+        font-size: 16px;
+        bottom: -30px;
+        font-weight: 900;
+        text-shadow: 
+          2px 2px 4px rgba(0, 0, 0, 1),
+          0 0 10px rgba(255, 255, 255, 0.9);
+        background: rgba(0, 0, 0, 0.7);
+        padding: 3px 8px;
+        border-radius: 5px;
+        border: 2px solid rgba(255, 255, 255, 0.4);
+      }
+
+      .deck-stack-card {
+        width: 75px;
+        height: 105px;
       }
 
       /* Область отбоя - компактно по центру */
@@ -1034,27 +1129,37 @@
 
       /* YOU - карты больше и равномерно распределены */
       .player-position-wrapper:nth-child(2) .player-cards {
-        min-height: 70px;
-        max-height: 80px;
-        padding: 0 5px;
-        justify-content: space-evenly;
-        gap: 2px;
+        min-height: 80px;
+        max-height: 90px;
+        padding: 0 8px;
+        justify-content: space-between;
+        gap: 3px;
+        align-items: center;
+        overflow-x: auto;
+        overflow-y: visible;
       }
 
       .player-position-wrapper:nth-child(2) .card {
-        width: 45px;
-        height: 63px;
+        width: 50px;
+        height: 70px;
         margin-left: 0 !important;
-        flex: 0 0 auto;
+        margin-right: 0 !important;
+        flex: 0 0 50px;
         transform: none !important;
+        position: relative;
       }
 
       .player-position-wrapper:nth-child(2) .card:first-child {
         margin-left: 0 !important;
       }
 
+      .player-position-wrapper:nth-child(2) .card:last-child {
+        margin-right: 0 !important;
+      }
+
       .player-position-wrapper:nth-child(2) .card:hover {
-        transform: translateY(-10px) scale(1.1) !important;
+        transform: translateY(-12px) scale(1.2) !important;
+        z-index: 100;
       }
 
       .player-position-wrapper:nth-child(2) .card-rank {
