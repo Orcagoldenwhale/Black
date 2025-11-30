@@ -547,17 +547,18 @@
       opacity: 0.7;
     }
 
-    /* Козырь торчит из-под колоды */
+    /* Козырь торчит из-под колоды перпендикулярно наполовину */
     .trump-card {
       width: 60px;
       height: 84px;
       border-radius: 6px;
       position: absolute;
-      top: 10px;
-      left: 10px;
+      top: 42px;
+      left: 5px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
       z-index: 0;
-      transform: rotate(-5deg);
+      transform: rotate(90deg);
+      transform-origin: center center;
     }
 
     .trump-label {
@@ -978,9 +979,10 @@
       .trump-card {
         width: 75px;
         height: 105px;
-        top: 15px;
-        left: 15px;
-        transform: rotate(-5deg);
+        top: 52px;
+        left: 5px;
+        transform: rotate(90deg);
+        transform-origin: center center;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7);
         z-index: 5;
       }
