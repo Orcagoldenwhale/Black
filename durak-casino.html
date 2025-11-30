@@ -1168,10 +1168,7 @@
 
     <!-- Кнопки управления -->
     <div class="controls">
-      <button class="control-btn" id="attackBtn" disabled title="Атаковать"><i class="fas fa-sword"></i></button>
-      <button class="control-btn" id="defendBtn" disabled title="Бить"><i class="fas fa-shield"></i></button>
       <button class="control-btn" id="takeBtn" disabled title="Взять"><i class="fas fa-hand-paper"></i></button>
-      <button class="control-btn" id="passBtn" disabled title="Пас"><i class="fas fa-hand"></i></button>
       <button class="control-btn" id="dealBtn" title="Раздать"><i class="fas fa-play"></i></button>
     </div>
 
@@ -1241,10 +1238,7 @@
       const trumpCardEl = document.querySelector('#trumpCard');
       const trumpSuitEl = document.querySelector('#trumpSuit');
       const playAreaEl = document.querySelector('#playArea');
-      const attackBtn = document.querySelector('#attackBtn');
-      const defendBtn = document.querySelector('#defendBtn');
       const takeBtn = document.querySelector('#takeBtn');
-      const passBtn = document.querySelector('#passBtn');
       const dealBtn = document.querySelector('#dealBtn');
       const gameMessage = document.querySelector('#gameMessage');
       const playerPositions = document.querySelectorAll('.player-position');
@@ -1364,30 +1358,48 @@
           `;
 
           if (isSelectable && playerIndex === 0) {
-            cardEl.addEventListener('click', () => toggleCard(card, cardEl));
+            cardEl.addEventListener('click', () => handleCardClick(card, cardEl));
           }
         }
 
         return cardEl;
       }
 
-      // Переключение выбора карты
-      function toggleCard(card, cardEl) {
-        const index = selectedCards.findIndex(c => c === card);
-        if (index === -1) {
-          selectedCards.push(card);
-          cardEl.classList.add('selected');
-        } else {
-          selectedCards.splice(index, 1);
-          cardEl.classList.remove('selected');
-          // Восстанавливаем исходную позицию при снятии выделения
-          const hand = players[0];
-          const cardIndex = hand.indexOf(card);
-          if (cardIndex !== -1) {
-            updateDisplay();
+      // Обработка клика по карте - автоматическая атака/защита
+      function handleCardClick(card, cardEl) {
+        if (!gameInProgress || currentPlayer !== 0) return;
+        
+        // Если защищаемся
+        if (isDefending && attackingCards.length > defendingCards.length) {
+          const attackCard = attackingCards[defendingCards.length];
+          if (canDefend(card, attackCard)) {
+            selectedCards = [card];
+            defend();
+            return;
+          } else {
+            showMessage('Не могу бить этой картой!', 'lose');
+            return;
           }
         }
-        updateButtons();
+        
+        // Если атакуем (первая атака или подкидываем)
+        if (!isDefending) {
+          if (attackingCards.length === 0) {
+            // Первая атака
+            if (canAttack(card)) {
+              selectedCards = [card];
+              attack();
+              return;
+            }
+          } else {
+            // Подкидываем
+            if (canAttack(card)) {
+              selectedCards = [card];
+              attack();
+              return;
+            }
+          }
+        }
       }
 
       // Обновление отображения
@@ -1443,40 +1455,22 @@
 
         if (!gameInProgress) {
           dealBtn.disabled = false;
-          attackBtn.disabled = true;
-          defendBtn.disabled = true;
           takeBtn.disabled = true;
-          passBtn.disabled = true;
           return;
         }
 
         dealBtn.disabled = true;
 
         if (isMyTurn) {
-          if (!isDefending && !hasAttack) {
-            // Можем атаковать
-            attackBtn.disabled = !hasSelected || selectedCards.length > players[0].length;
-            defendBtn.disabled = true;
-            takeBtn.disabled = true;
-            passBtn.disabled = true;
-          } else if (isDefending && hasAttack) {
-            // Должны бить
-            attackBtn.disabled = true;
-            defendBtn.disabled = hasSelected && !canDefend(selectedCards[0], attackingCards[defendingCards.length]);
+          if (isDefending && hasAttack) {
+            // Должны бить - можно взять
             takeBtn.disabled = false;
-            passBtn.disabled = true;
-          } else if (!isDefending && hasAttack) {
-            // Можем подкинуть или пас
-            attackBtn.disabled = !hasSelected || !canAttack(selectedCards[0]);
-            defendBtn.disabled = true;
+          } else {
+            // Атакуем или подкидываем - нельзя взять
             takeBtn.disabled = true;
-            passBtn.disabled = selectedCards.length > 0;
           }
         } else {
-          attackBtn.disabled = true;
-          defendBtn.disabled = true;
           takeBtn.disabled = true;
-          passBtn.disabled = true;
         }
       }
 
@@ -1706,10 +1700,7 @@
       }
 
       // События
-      attackBtn.addEventListener('click', attack);
-      defendBtn.addEventListener('click', defend);
       takeBtn.addEventListener('click', take);
-      passBtn.addEventListener('click', pass);
       dealBtn.addEventListener('click', dealCards);
 
       // Инициализация
