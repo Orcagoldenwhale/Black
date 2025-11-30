@@ -1709,6 +1709,7 @@
           const card = hand[0];
           hand.splice(0, 1);
           attackingCards.push(card);
+          attackerPlayer = playerIndex; // Запоминаем кто атаковал
           isDefending = true;
           updateDisplay();
           
