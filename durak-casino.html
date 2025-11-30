@@ -1667,15 +1667,26 @@
         }
       }
 
-      // AI защита
+      // AI защита - простой алгоритм
       function aiDefend(playerIndex) {
         const hand = players[playerIndex];
+        if (hand.length === 0 || defendingCards.length >= attackingCards.length) {
+          clearPlayArea();
+          setTimeout(() => nextTurn(), 1000);
+          return;
+        }
+
         const attackCard = attackingCards[defendingCards.length];
         
-        // Ищем карту для отбоя
-        const defendCard = hand.find(card => canDefend(card, attackCard));
+        // Находим все карты, которыми можем отбить
+        const possibleDefendCards = hand.filter(card => canDefend(card, attackCard));
         
-        if (defendCard) {
+        if (possibleDefendCards.length > 0) {
+          // Берем самую слабую карту для отбоя (чтобы экономить сильные)
+          const defendCard = possibleDefendCards.reduce((min, card) => 
+            card.value < min.value ? card : min
+          );
+          
           const index = hand.findIndex(c => c === defendCard);
           hand.splice(index, 1);
           defendingCards.push(defendCard);
@@ -1683,20 +1694,24 @@
           updateDisplay();
           
           if (defendingCards.length >= attackingCards.length) {
+            // Все отбиты
             clearPlayArea();
+            currentPlayer = attackerPlayer;
+            attackerPlayer = -1;
             setTimeout(() => nextTurn(), 1000);
           } else {
+            // Еще нужно отбивать
             setTimeout(() => aiDefend(playerIndex), 1000);
           }
         } else {
-          // Не может бить - берет
+          // Не может бить - берет все карты
           hand.push(...attackingCards, ...defendingCards);
           clearPlayArea();
           setTimeout(() => nextTurn(), 1500);
         }
       }
 
-      // AI атака
+      // AI атака - простой алгоритм
       function aiAttack(playerIndex) {
         const hand = players[playerIndex];
         if (hand.length === 0) {
@@ -1705,33 +1720,40 @@
         }
 
         if (attackingCards.length === 0) {
-          // Первая атака - берем самую младшую
+          // Первая атака - берем самую младшую карту
           const card = hand[0];
           hand.splice(0, 1);
           attackingCards.push(card);
-          attackerPlayer = playerIndex; // Запоминаем кто атаковал
+          attackerPlayer = playerIndex;
           isDefending = true;
           updateDisplay();
           
+          // Переход к защитнику
           const nextPlayer = (playerIndex + 1) % 3;
           if (nextPlayer !== 0) {
             setTimeout(() => aiDefend(nextPlayer), 1000);
+          } else {
+            updateButtons();
           }
         } else {
-          // Подкидываем, если можем
-          const canAdd = hand.find(card => canAttack(card));
-          if (canAdd && attackingCards.length + defendingCards.length < 6) {
-            const index = hand.findIndex(c => c === canAdd);
+          // Подкидываем карты - находим подходящие
+          const canAddCards = hand.filter(card => canAttack(card));
+          
+          if (canAddCards.length > 0 && attackingCards.length + defendingCards.length < 6) {
+            // Берем первую подходящую карту
+            const card = canAddCards[0];
+            const index = hand.findIndex(c => c === card);
             hand.splice(index, 1);
-            attackingCards.push(canAdd);
+            attackingCards.push(card);
             updateDisplay();
-            // Если еще можно подкинуть - продолжаем, иначе передаем ход защитнику
+            
+            // Проверяем, можем ли еще подкинуть
             if (attackingCards.length + defendingCards.length < 6 && hand.length > 0) {
-              const canAddMore = hand.find(card => canAttack(card));
+              const canAddMore = hand.find(c => canAttack(c));
               if (canAddMore) {
                 setTimeout(() => aiAttack(playerIndex), 800);
               } else {
-                // Не можем больше подкинуть - передаем защитнику
+                // Не можем больше - передаем защитнику
                 const nextPlayer = (playerIndex + 1) % 3;
                 if (nextPlayer !== 0) {
                   setTimeout(() => aiDefend(nextPlayer), 1000);
@@ -1740,7 +1762,7 @@
                 }
               }
             } else {
-              // Достигли лимита или кончились карты - передаем защитнику
+              // Достигли лимита - передаем защитнику
               const nextPlayer = (playerIndex + 1) % 3;
               if (nextPlayer !== 0) {
                 setTimeout(() => aiDefend(nextPlayer), 1000);
@@ -1749,7 +1771,7 @@
               }
             }
           } else {
-            // Пас - очищаем отбой и передаем ход
+            // Не можем подкинуть - пас
             clearPlayArea();
             setTimeout(() => nextTurn(), 1000);
           }
