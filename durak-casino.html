@@ -384,7 +384,7 @@
 
     .deck-container {
       position: relative;
-      width: 150px;
+      width: 140px;
       height: 98px;
     }
 
@@ -536,7 +536,7 @@
       border-radius: 6px;
       position: absolute;
       top: 0;
-      left: 75px;
+      left: 70px;
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.7);
       z-index: 10;
       transform: none;
@@ -1312,7 +1312,12 @@
         isDefending = false;
         updateDisplay();
         updateButtons();
-        setActivePosition(0);
+        setActivePosition(firstPlayer);
+        
+        // Если первый ход у AI - он ходит автоматически
+        if (currentPlayer !== 0) {
+          setTimeout(() => aiTurn(currentPlayer), 1500);
+        }
       }
 
       // Отображение козыря
@@ -1449,8 +1454,9 @@
 
       // Установка активной позиции
       function setActivePosition(index) {
-        playerPositions.forEach((pos, idx) => {
-          if (idx === index) {
+        playerPositions.forEach((pos) => {
+          const posIndex = parseInt(pos.getAttribute('data-position'));
+          if (posIndex === index) {
             pos.classList.add('active');
           } else {
             pos.classList.remove('active');
