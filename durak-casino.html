@@ -529,20 +529,18 @@
       opacity: 0.7;
     }
 
-    /* Козырь торчит из-под колоды перпендикулярно наполовину */
+    /* Козырь - последняя карта из колоды, лежит рядом с колодой */
     .trump-card {
       width: 60px;
       height: 84px;
       border-radius: 6px;
       position: absolute;
-      top: 42px;
-      left: -30px;
+      top: 0;
+      left: 75px;
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.7);
       z-index: 10;
-      transform: rotate(90deg);
-      transform-origin: center center;
+      transform: none;
       opacity: 1;
-      background: white;
     }
 
     .trump-label {
@@ -941,14 +939,12 @@
       .trump-card {
         width: 75px;
         height: 105px;
-        top: 52px;
-        left: -38px;
-        transform: rotate(90deg);
-        transform-origin: center center;
+        top: 0;
+        left: 90px;
+        transform: none;
         box-shadow: 0 6px 15px rgba(0, 0, 0, 0.7);
         z-index: 10;
         opacity: 1;
-        background: white;
       }
 
       .trump-label {
