@@ -531,28 +531,76 @@
     }
 
     .control-btn {
-      padding: 10px 20px;
+      width: 50px;
+      height: 50px;
       border: none;
-      border-radius: 10px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.3);
       color: white;
-      font-size: 13px;
+      font-size: 20px;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-family: 'Montserrat', sans-serif;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-      white-space: nowrap;
+      padding: 0;
+      box-shadow: 
+        0 4px 15px rgba(0, 0, 0, 0.3),
+        0 0 20px rgba(102, 126, 234, 0.4),
+        inset 0 2px 4px rgba(255, 255, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .control-btn::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transform: rotate(45deg);
+      transition: all 0.5s;
+    }
+
+    .control-btn:hover:not(:disabled)::before {
+      animation: shine 0.5s ease-in-out;
+    }
+
+    @keyframes shine {
+      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+      100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
     }
 
     .control-btn:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+      transform: translateY(-3px) scale(1.1);
+      box-shadow: 
+        0 6px 20px rgba(0, 0, 0, 0.4),
+        0 0 30px rgba(102, 126, 234, 0.6),
+        inset 0 2px 4px rgba(255, 255, 255, 0.3);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .control-btn:active:not(:disabled) {
+      transform: translateY(-1px) scale(1.05);
+      box-shadow: 
+        0 3px 10px rgba(0, 0, 0, 0.3),
+        0 0 15px rgba(102, 126, 234, 0.5);
     }
 
     .control-btn:disabled {
       opacity: 0.5;
       cursor: not-allowed;
+      transform: none;
+    }
+
+    .control-btn i {
+      font-size: 18px;
     }
 
     /* Сообщения */
@@ -728,26 +776,165 @@
     @media screen and (max-width: 600px) and (orientation: portrait) {
       body {
         padding: 5px;
+        overflow-y: auto;
       }
 
       .casino-table {
         width: 100%;
-        height: calc(100vh - 80px);
+        height: auto;
+        min-height: 100vh;
         max-height: none;
+        border-radius: 15px;
+        border-width: 4px;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
       }
 
+      /* Info bar - компактный вверху */
+      .info-bar {
+        position: relative;
+        top: 0;
+        left: 0;
+        right: 0;
+        gap: 5px;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+      }
 
+      .info-item {
+        flex: 1;
+        min-width: calc(33.33% - 4px);
+        padding: 8px 10px;
+        font-size: 11px;
+        border-radius: 8px;
+      }
+
+      /* Центральный баннер - компактно */
+      .table-info {
+        position: relative;
+        bottom: auto;
+        padding: 4px 8px;
+        font-size: 8px;
+        margin: 5px 0;
+        order: 3;
+      }
+
+      /* Колода - компактно */
       .deck-area {
-        top: 50px;
+        position: relative;
+        top: 0;
+        left: 0;
+        transform: none;
+        margin: 10px auto;
+        order: 2;
       }
 
-      .player-positions {
-        bottom: 10px;
+      .deck-container {
+        width: 60px;
+        height: 84px;
       }
 
-      .card {
+      .trump-label {
+        font-size: 10px;
+        top: -15px;
+      }
+
+      /* Область отбоя - компактно */
+      .play-area {
+        position: relative;
+        top: 0;
+        left: 0;
+        width: 100%;
+        min-height: 120px;
+        max-height: 150px;
+        margin: 10px 0;
+        order: 1;
+      }
+
+      .play-area .card {
+        width: 35px;
+        height: 49px;
+        font-size: 10px;
+      }
+
+      /* Кнопки управления - компактно */
+      .controls {
+        position: relative;
+        top: 0;
+        left: 0;
+        transform: none;
+        margin: 10px 0;
+        gap: 8px;
+        order: 4;
+      }
+
+      .control-btn {
         width: 45px;
-        height: 63px;
+        height: 45px;
+        font-size: 16px;
+      }
+
+      .control-btn i {
+        font-size: 16px;
+      }
+
+      /* Игроки - компактно */
+      .player-positions {
+        position: relative;
+        bottom: auto;
+        left: 0;
+        transform: none;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px;
+        width: 100%;
+        margin-top: 10px;
+        order: 5;
+        align-items: flex-start;
+        justify-content: center;
+      }
+
+      .player-position-wrapper {
+        flex: 0 0 calc(33.33% - 6px);
+        max-width: calc(33.33% - 6px);
+      }
+
+      .player-position {
+        padding: 8px;
+        min-width: auto;
+        width: 100%;
+      }
+
+      .player-label {
+        font-size: 10px;
+        margin-bottom: 3px;
+      }
+
+      .player-cards {
+        min-height: 50px;
+        max-height: 60px;
+        padding: 0 5px;
+      }
+
+      .player-card-count {
+        font-size: 9px;
+        margin-top: 3px;
+      }
+
+      /* Карты - меньше */
+      .card {
+        width: 30px;
+        height: 42px;
+        font-size: 8px;
+      }
+
+      .card-rank {
+        font-size: 10px;
+      }
+
+      .card-suit {
+        font-size: 12px;
       }
     }
   </style>
@@ -786,11 +973,11 @@
 
     <!-- Кнопки управления -->
     <div class="controls">
-      <button class="control-btn" id="attackBtn" disabled>Атаковать</button>
-      <button class="control-btn" id="defendBtn" disabled>Бить</button>
-      <button class="control-btn" id="takeBtn" disabled>Взять</button>
-      <button class="control-btn" id="passBtn" disabled>Пас</button>
-      <button class="control-btn" id="dealBtn">Раздать</button>
+      <button class="control-btn" id="attackBtn" disabled title="Атаковать"><i class="fas fa-sword"></i></button>
+      <button class="control-btn" id="defendBtn" disabled title="Бить"><i class="fas fa-shield"></i></button>
+      <button class="control-btn" id="takeBtn" disabled title="Взять"><i class="fas fa-hand-paper"></i></button>
+      <button class="control-btn" id="passBtn" disabled title="Пас"><i class="fas fa-hand"></i></button>
+      <button class="control-btn" id="dealBtn" title="Раздать"><i class="fas fa-play"></i></button>
     </div>
 
     <!-- Игровые позиции -->
