@@ -1687,9 +1687,31 @@
             hand.splice(index, 1);
             attackingCards.push(canAdd);
             updateDisplay();
-            setTimeout(() => aiAttack(playerIndex), 800);
+            // Если еще можно подкинуть - продолжаем, иначе передаем ход защитнику
+            if (attackingCards.length + defendingCards.length < 6 && hand.length > 0) {
+              const canAddMore = hand.find(card => canAttack(card));
+              if (canAddMore) {
+                setTimeout(() => aiAttack(playerIndex), 800);
+              } else {
+                // Не можем больше подкинуть - передаем защитнику
+                const nextPlayer = (playerIndex + 1) % 3;
+                if (nextPlayer !== 0) {
+                  setTimeout(() => aiDefend(nextPlayer), 1000);
+                } else {
+                  updateButtons();
+                }
+              }
+            } else {
+              // Достигли лимита или кончились карты - передаем защитнику
+              const nextPlayer = (playerIndex + 1) % 3;
+              if (nextPlayer !== 0) {
+                setTimeout(() => aiDefend(nextPlayer), 1000);
+              } else {
+                updateButtons();
+              }
+            }
           } else {
-            // Пас
+            // Пас - очищаем отбой и передаем ход
             clearPlayArea();
             setTimeout(() => nextTurn(), 1000);
           }
