@@ -1215,6 +1215,7 @@
       let isDefending = false; // Режим отбоя
       let attackingCards = []; // Карты в отбое (атака)
       let defendingCards = []; // Карты в отбое (защита)
+      let attackerPlayer = -1; // Кто начал атаку
       let gameInProgress = false;
       let selectedCards = [];
 
@@ -1295,7 +1296,19 @@
           });
         });
 
-        currentPlayer = 0;
+        // Определяем кто ходит первым (игрок с младшим козырем)
+        let minTrumpValue = 15;
+        let firstPlayer = 0;
+        players.forEach((hand, idx) => {
+          const trumpInHand = hand.find(c => c.suit === trumpSuit);
+          if (trumpInHand && trumpInHand.value < minTrumpValue) {
+            minTrumpValue = trumpInHand.value;
+            firstPlayer = idx;
+          }
+        });
+
+        currentPlayer = firstPlayer;
+        attackerPlayer = -1;
         isDefending = false;
         updateDisplay();
         updateButtons();
@@ -1505,6 +1518,7 @@
         });
 
         selectedCards = [];
+        attackerPlayer = currentPlayer; // Запоминаем кто атаковал
         isDefending = true;
         updateDisplay();
         
@@ -1537,20 +1551,42 @@
           selectedCards = [];
         }
 
-        // Если все отбиты, очищаем отбой и переходим к следующему игроку
+        // Если все отбиты, очищаем отбой и передаем ход атаковавшему
         if (defendingCards.length >= attackingCards.length) {
           clearPlayArea();
+          // Ход переходит к тому кто атаковал
+          currentPlayer = attackerPlayer;
+          attackerPlayer = -1;
           nextTurn();
         } else {
-          // Еще есть карты для отбоя - следующий игрок может подкинуть
+          // Еще есть карты для отбоя - третий игрок может подкинуть
           updateDisplay();
-          const nextPlayer = (currentPlayer + 1) % 3;
-          if (nextPlayer !== 0) {
-            // AI может подкинуть
-            setTimeout(() => aiAttack(nextPlayer), 1000);
+          // Третий игрок = не атаковавший и не защищающийся
+          const thirdPlayer = (3 - currentPlayer - attackerPlayer) % 3;
+          if (thirdPlayer < 0 || thirdPlayer === currentPlayer || thirdPlayer === attackerPlayer) {
+            // Если третий игрок не найден, передаем следующему
+            const nextPlayer = (currentPlayer + 1) % 3;
+            if (nextPlayer === attackerPlayer) {
+              // Следующий = атаковавший, значит третий
+              const third = (attackerPlayer + 1) % 3;
+              if (third !== 0) {
+                setTimeout(() => aiAttack(third), 1000);
+              } else {
+                updateButtons();
+              }
+            } else {
+              if (nextPlayer !== 0) {
+                setTimeout(() => aiAttack(nextPlayer), 1000);
+              } else {
+                updateButtons();
+              }
+            }
           } else {
-            // Ход игрока - может подкинуть или пропустить
-            updateButtons();
+            if (thirdPlayer !== 0) {
+              setTimeout(() => aiAttack(thirdPlayer), 1000);
+            } else {
+              updateButtons();
+            }
           }
         }
       }
@@ -1579,6 +1615,7 @@
         defendingCards = [];
         selectedCards = [];
         isDefending = false;
+        attackerPlayer = -1;
         updateDisplay();
       }
 
