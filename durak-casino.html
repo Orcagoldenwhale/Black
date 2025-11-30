@@ -140,6 +140,50 @@
       align-items: center;
     }
 
+    /* Player 2 и 3 - слева и справа, меньше */
+    .player-position-wrapper:first-child,
+    .player-position-wrapper:nth-child(3) {
+      flex: 0.9;
+      max-width: 240px;
+    }
+
+    /* Player 1 (YOU) - центр, больше */
+    .player-position-wrapper:nth-child(2) {
+      flex: 1.1;
+      max-width: 300px;
+      order: 2;
+    }
+
+    .player-position-wrapper:first-child {
+      order: 1;
+    }
+
+    .player-position-wrapper:nth-child(3) {
+      order: 3;
+    }
+
+    /* Player 2 и 3 - меньший размер */
+    .player-position-wrapper:first-child .player-label,
+    .player-position-wrapper:nth-child(3) .player-label {
+      font-size: 14px;
+    }
+
+    .player-position-wrapper:first-child .player-position,
+    .player-position-wrapper:nth-child(3) .player-position {
+      padding: 15px;
+      border-width: 2px;
+    }
+
+    /* Player 1 (YOU) - больший размер */
+    .player-position-wrapper:nth-child(2) .player-label {
+      font-size: 20px;
+    }
+
+    .player-position-wrapper:nth-child(2) .player-position {
+      padding: 20px;
+      border-width: 3px;
+    }
+
     .player-position {
       width: 100%;
       text-align: center;
@@ -487,8 +531,8 @@
     }
 
     .play-area .card {
-      width: 55px;
-      height: 77px;
+      width: 60px;
+      height: 84px;
       margin-bottom: 5px;
       margin-right: 5px;
     }
@@ -519,15 +563,14 @@
     /* Кнопки управления */
     .controls {
       position: absolute;
-      top: 340px;
-      left: 50%;
-      transform: translateX(-50%);
+      top: 50%;
+      right: 30px;
+      transform: translateY(-50%);
       display: flex;
+      flex-direction: column;
       gap: 12px;
       z-index: 20;
-      flex-wrap: wrap;
-      justify-content: center;
-      max-width: 80%;
+      align-items: center;
     }
 
     .control-btn {
@@ -982,23 +1025,26 @@
 
     <!-- Игровые позиции -->
     <div class="player-positions">
-      <div class="player-position-wrapper">
-        <div class="player-position active" data-position="0">
-          <div class="player-label">ИГРОК 1</div>
-          <div class="player-cards" id="playerCards0"></div>
-          <div class="player-card-count" id="playerCount0">0 карт</div>
-        </div>
-      </div>
+      <!-- Player 2 - слева, AI -->
       <div class="player-position-wrapper">
         <div class="player-position" data-position="1">
-          <div class="player-label">ИГРОК 2</div>
+          <div class="player-label">Anonymous</div>
           <div class="player-cards" id="playerCards1"></div>
           <div class="player-card-count" id="playerCount1">0 карт</div>
         </div>
       </div>
+      <!-- Player 1 (YOU) - центр, больше -->
+      <div class="player-position-wrapper">
+        <div class="player-position active" data-position="0">
+          <div class="player-label">YOU</div>
+          <div class="player-cards" id="playerCards0"></div>
+          <div class="player-card-count" id="playerCount0">0 карт</div>
+        </div>
+      </div>
+      <!-- Player 3 - справа, AI -->
       <div class="player-position-wrapper">
         <div class="player-position" data-position="2">
-          <div class="player-label">ИГРОК 3</div>
+          <div class="player-label">Anonymous</div>
           <div class="player-cards" id="playerCards2"></div>
           <div class="player-card-count" id="playerCount2">0 карт</div>
         </div>
