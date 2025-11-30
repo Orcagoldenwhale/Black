@@ -1296,14 +1296,20 @@
           });
         });
 
-        // Определяем кто ходит первым (игрок с младшим козырем)
+        // Определяем кто ходит первым (игрок с САМЫМ МЛАДШИМ козырем)
         let minTrumpValue = 15;
         let firstPlayer = 0;
         players.forEach((hand, idx) => {
-          const trumpInHand = hand.find(c => c.suit === trumpSuit);
-          if (trumpInHand && trumpInHand.value < minTrumpValue) {
-            minTrumpValue = trumpInHand.value;
-            firstPlayer = idx;
+          // Ищем все козыри в руке и находим самый младший
+          const trumpsInHand = hand.filter(c => c.suit === trumpSuit);
+          if (trumpsInHand.length > 0) {
+            const minTrump = trumpsInHand.reduce((min, card) => 
+              card.value < min.value ? card : min
+            );
+            if (minTrump.value < minTrumpValue) {
+              minTrumpValue = minTrump.value;
+              firstPlayer = idx;
+            }
           }
         });
 
