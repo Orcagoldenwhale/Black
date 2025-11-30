@@ -917,25 +917,26 @@
         top: -15px;
       }
 
-      /* Область отбоя - компактно */
+      /* Область отбоя - компактно по центру */
       .play-area {
         position: relative;
         top: 0;
         left: 0;
         width: 100%;
-        min-height: 120px;
-        max-height: 150px;
+        min-height: 150px;
+        max-height: 180px;
         margin: 10px 0;
         order: 1;
+        transform: none;
       }
 
       .play-area .card {
-        width: 35px;
-        height: 49px;
+        width: 40px;
+        height: 56px;
         font-size: 10px;
       }
 
-      /* Кнопки управления - компактно */
+      /* Кнопки управления - компактно горизонтально */
       .controls {
         position: relative;
         top: 0;
@@ -944,6 +945,9 @@
         margin: 10px 0;
         gap: 8px;
         order: 4;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
       }
 
       .control-btn {
