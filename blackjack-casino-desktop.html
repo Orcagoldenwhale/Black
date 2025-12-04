@@ -1532,7 +1532,7 @@
         }
         
         // Показываем результаты всех игроков последовательно
-        let totalWin = 0;
+        let youWin = 0; // Выигрыш только YOU (позиция 0)
         let allBust = true;
         let currentDelay = 0;
         
@@ -1544,16 +1544,22 @@
             // Перебор
           } else if (playerScore === 21 && hand.length === 2) {
             win = currentBet * 2.5;
-            totalWin += win;
-            allBust = false;
+            if (idx === 0) { // Только для YOU
+              youWin = win;
+              allBust = false;
+            }
           } else if (dealerScoreFinal > 21 || playerScore > dealerScoreFinal) {
             win = currentBet * 2;
-            totalWin += win;
-            allBust = false;
+            if (idx === 0) { // Только для YOU
+              youWin = win;
+              allBust = false;
+            }
           } else if (playerScore === dealerScoreFinal) {
             win = currentBet;
-            totalWin += win;
-            allBust = false;
+            if (idx === 0) { // Только для YOU
+              youWin = win;
+              allBust = false;
+            }
           }
           
           // Показываем результат игрока с задержкой
@@ -1563,12 +1569,12 @@
         
         // Показываем итоговое сообщение после всех игроков
         setTimeout(() => {
-          balance += totalWin;
+          balance += youWin;
           balanceEl.textContent = balance;
-          winAmountEl.textContent = totalWin;
+          winAmountEl.textContent = youWin;
           
-          if (totalWin > 0) {
-            showMessage(`Общий выигрыш: ${totalWin}€!`, 'win');
+          if (youWin > 0) {
+            showMessage(`Выигрыш: ${youWin}€!`, 'win');
             if (typeof confetti !== 'undefined') {
               confetti({
                 particleCount: 100,
@@ -1577,7 +1583,7 @@
               });
             }
           } else if (allBust) {
-            showMessage('Все переборы!', 'lose');
+            showMessage('Перебор!', 'lose');
           } else {
             showMessage('Ничья!', 'draw');
           }
