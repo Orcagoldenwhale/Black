@@ -1492,8 +1492,49 @@
         gameInProgress = false;
         renderCards();
         
+        const dealerScoreFinal = dealerScore;
+        const delayPerPlayer = 667; // 2/3 секунды = 667ms
+        
+        // Функция для показа результата игрока
+        function showPlayerResult(playerIndex, delay) {
+          setTimeout(() => {
+            const hand = playerHands[playerIndex];
+            const playerScore = calculateScore(hand);
+            let win = 0;
+            let resultText = '';
+            
+            if (playerScore > 21) {
+              resultText = `Игрок ${playerIndex + 1}: Перебор!`;
+              showMessage(resultText, 'lose');
+            } else if (playerScore === 21 && hand.length === 2) {
+              win = currentBet * 2.5;
+              resultText = `Игрок ${playerIndex + 1}: Блэкджек! +${win}€`;
+              showMessage(resultText, 'win');
+            } else if (dealerScoreFinal > 21 || playerScore > dealerScoreFinal) {
+              win = currentBet * 2;
+              resultText = `Игрок ${playerIndex + 1}: Выигрыш! +${win}€`;
+              showMessage(resultText, 'win');
+            } else if (playerScore === dealerScoreFinal) {
+              win = currentBet;
+              resultText = `Игрок ${playerIndex + 1}: Ничья! +${win}€`;
+              showMessage(resultText, 'draw');
+            } else {
+              resultText = `Игрок ${playerIndex + 1}: Проигрыш`;
+              showMessage(resultText, 'lose');
+            }
+            
+            // Обновляем счет игрока
+            playerScoreEls[playerIndex].textContent = `Очки: ${playerScore}`;
+            if (win > 0) {
+              playerScoreEls[playerIndex].textContent += ` (+${win}€)`;
+            }
+          }, delay);
+        }
+        
+        // Показываем результаты всех игроков последовательно
         let totalWin = 0;
         let allBust = true;
+        let currentDelay = 0;
         
         playerHands.forEach((hand, idx) => {
           const playerScore = calculateScore(hand);
@@ -1502,47 +1543,47 @@
           if (playerScore > 21) {
             // Перебор
           } else if (playerScore === 21 && hand.length === 2) {
-            // Блэкджек
             win = currentBet * 2.5;
             totalWin += win;
             allBust = false;
-          } else if (dealerScore > 21 || playerScore > dealerScore) {
+          } else if (dealerScoreFinal > 21 || playerScore > dealerScoreFinal) {
             win = currentBet * 2;
             totalWin += win;
             allBust = false;
-          } else if (playerScore === dealerScore) {
+          } else if (playerScore === dealerScoreFinal) {
             win = currentBet;
             totalWin += win;
             allBust = false;
           }
           
-          // Показываем результат для всех игроков
-          playerScoreEls[idx].textContent = `Очки: ${playerScore}`;
-          if (win > 0) {
-            playerScoreEls[idx].textContent += ` (+${win}€)`;
-          }
+          // Показываем результат игрока с задержкой
+          showPlayerResult(idx, currentDelay);
+          currentDelay += delayPerPlayer * 2; // Показ + пауза = 2 * 2/3 секунды
         });
         
-        balance += totalWin;
-        balanceEl.textContent = balance;
-        winAmountEl.textContent = totalWin;
-        
-        if (totalWin > 0) {
-          showMessage(`Выигрыш: ${totalWin}€!`, 'win');
-          if (typeof confetti !== 'undefined') {
-            confetti({
-              particleCount: 100,
-              spread: 70,
-              origin: { y: 0.6 }
-            });
+        // Показываем итоговое сообщение после всех игроков
+        setTimeout(() => {
+          balance += totalWin;
+          balanceEl.textContent = balance;
+          winAmountEl.textContent = totalWin;
+          
+          if (totalWin > 0) {
+            showMessage(`Общий выигрыш: ${totalWin}€!`, 'win');
+            if (typeof confetti !== 'undefined') {
+              confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+              });
+            }
+          } else if (allBust) {
+            showMessage('Все переборы!', 'lose');
+          } else {
+            showMessage('Ничья!', 'draw');
           }
-        } else if (allBust) {
-          showMessage('Все переборы!', 'lose');
-        } else {
-          showMessage('Ничья!', 'draw');
-        }
-        
-        updateButtons();
+          
+          updateButtons();
+        }, currentDelay);
       }
 
       function showMessage(text, type) {
@@ -1550,7 +1591,7 @@
         gameMessage.className = `game-message ${type} show`;
         setTimeout(() => {
           gameMessage.classList.remove('show');
-        }, 3000);
+        }, 667); // 2/3 секунды = 667ms
       }
 
       function updateButtons() {
