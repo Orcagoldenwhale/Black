@@ -1503,24 +1503,54 @@
             let win = 0;
             let resultText = '';
             
-            if (playerScore > 21) {
-              resultText = `Игрок ${playerIndex + 1}: Перебор!`;
-              showMessage(resultText, 'lose');
-            } else if (playerScore === 21 && hand.length === 2) {
-              win = currentBet * 2.5;
-              resultText = `Игрок ${playerIndex + 1}: Блэкджек! +${win}€`;
-              showMessage(resultText, 'win');
-            } else if (dealerScoreFinal > 21 || playerScore > dealerScoreFinal) {
-              win = currentBet * 2;
-              resultText = `Игрок ${playerIndex + 1}: Выигрыш! +${win}€`;
-              showMessage(resultText, 'win');
-            } else if (playerScore === dealerScoreFinal) {
-              win = currentBet;
-              resultText = `Игрок ${playerIndex + 1}: Ничья! +${win}€`;
-              showMessage(resultText, 'draw');
+            // Для YOU (позиция 0) - реальная логика
+            if (playerIndex === 0) {
+              if (playerScore > 21) {
+                resultText = `YOU: Перебор!`;
+                showMessage(resultText, 'lose');
+              } else if (playerScore === 21 && hand.length === 2) {
+                win = currentBet * 2.5;
+                resultText = `YOU: Блэкджек! +${win}€`;
+                showMessage(resultText, 'win');
+              } else if (dealerScoreFinal > 21 || playerScore > dealerScoreFinal) {
+                win = currentBet * 2;
+                resultText = `YOU: Выигрыш! +${win}€`;
+                showMessage(resultText, 'win');
+              } else if (playerScore === dealerScoreFinal) {
+                win = currentBet;
+                resultText = `YOU: Ничья! +${win}€`;
+                showMessage(resultText, 'draw');
+              } else {
+                resultText = `YOU: Проигрыш`;
+                showMessage(resultText, 'lose');
+              }
             } else {
-              resultText = `Игрок ${playerIndex + 1}: Проигрыш`;
-              showMessage(resultText, 'lose');
+              // Для других игроков (ИГРОК 2 и ИГРОК 3) - случайные результаты
+              // ~33% вероятность выигрыша 400€ (как будто удвоили)
+              const random = Math.random();
+              const playerName = playerIndex === 1 ? 'ИГРОК 2' : 'ИГРОК 3';
+              
+              if (random < 0.33) {
+                // Выигрыш 400€ (удвоение) - примерно раз в 3 игры
+                win = 400;
+                resultText = `${playerName}: Выигрыш! +${win}€`;
+                showMessage(resultText, 'win');
+              } else if (random < 0.55) {
+                // Выигрыш 200€
+                win = 200;
+                resultText = `${playerName}: Выигрыш! +${win}€`;
+                showMessage(resultText, 'win');
+              } else if (random < 0.7) {
+                // Ничья 100€
+                win = 100;
+                resultText = `${playerName}: Ничья! +${win}€`;
+                showMessage(resultText, 'draw');
+              } else {
+                // Проигрыш
+                win = 0;
+                resultText = `${playerName}: Проигрыш`;
+                showMessage(resultText, 'lose');
+              }
             }
             
             // Обновляем счет игрока
