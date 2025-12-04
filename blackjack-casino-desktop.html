@@ -1600,9 +1600,11 @@
         const youPanel = document.querySelector('[data-position="0"]');
         if (youPanel) {
           setTimeout(() => {
+            // На мобильных используем 'nearest', на десктопе 'center'
+            const isMobile = window.innerWidth <= 600px;
             youPanel.scrollIntoView({
               behavior: 'smooth',
-              block: 'center',
+              block: isMobile ? 'nearest' : 'center',
               inline: 'nearest'
             });
           }, 300);
