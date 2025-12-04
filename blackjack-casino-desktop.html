@@ -375,6 +375,26 @@
       100% { transform: rotateY(0deg) scale(1); }
     }
 
+    /* Плавное открытие карт для YOU */
+    .card.smooth-reveal {
+      animation: smoothReveal 0.8s ease-out forwards;
+    }
+
+    @keyframes smoothReveal {
+      0% {
+        opacity: 0;
+        transform: rotateY(180deg) scale(0.8);
+      }
+      50% {
+        opacity: 0.5;
+        transform: rotateY(90deg) scale(0.9);
+      }
+      100% {
+        opacity: 1;
+        transform: rotateY(0deg) scale(1);
+      }
+    }
+
     .card.red {
       color: #d32f2f;
     }
@@ -1260,6 +1280,12 @@
             // Для позиций 1 и 2 (AI игроки) показываем карты рубашкой во время игры
             const shouldHide = (position === 1 || position === 2) && gameInProgress;
             const cardEl = createCardElement(card, shouldHide, true);
+            
+            // Плавное открытие карт только для YOU (позиция 0)
+            if (position === 0 && !shouldHide) {
+              cardEl.classList.add('smooth-reveal');
+            }
+            
             playerCardsEls[position].appendChild(cardEl);
             const score = calculateScore(playerHands[position]);
             // Для AI игроков не показываем очки во время игры
@@ -1569,10 +1595,31 @@
         setTimeout(() => stand(), 800);
       });
 
+      // Автопрокрутка к панели YOU при загрузке страницы
+      function scrollToYouPanel() {
+        const youPanel = document.querySelector('[data-position="0"]');
+        if (youPanel) {
+          setTimeout(() => {
+            youPanel.scrollIntoView({
+              behavior: 'smooth',
+              block: 'center',
+              inline: 'nearest'
+            });
+          }, 300);
+        }
+      }
+
       // Инициализация казино стиля
       blackjackDeck = createDeck();
       updateDeckCount();
       updateButtons();
+      
+      // Автопрокрутка при загрузке
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', scrollToYouPanel);
+      } else {
+        scrollToYouPanel();
+      }
     })();
   </script>
 </body>
